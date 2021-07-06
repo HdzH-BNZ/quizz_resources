@@ -1,0 +1,167 @@
+			QUIZZ DJANGO & CO
+pr créer une bonne API Django:
+- faire un dossier logs avec des logger.info & logger.errors
+- vérifier que le nommage des fichiers & dossiers conforme aux
+  normes DevOps
+- fonctionne en Http & Https
+- utiliser un client de test
+
+1) créer nos class de modèles depuis les tables d'1 DB PG ?
+
+REP : python manage.py inspectdb > models.py
+
+
+si on génère des urls basiques sans regex ds le app/urls.py, 
+automatiquement leurs routes tiendront compte des primary key ID
+
+2) how to use les décorateurs api_view en GET POST ?
+
+REP : suffit d'écrire le décorateur juste la ligne au-dessus de
+la fct définie ds les views.py
+
+
+3) exécuter un curseur
+
+REP : cursor.execute(
+	"INSERT INTO table VALUES(%s,%s)", (int(id), string)
+)
+
+4) ouvrir le shell django :
+
+REP : python manage.py shell
+
+5) rename les fields dans un serializer :
+
+REP : newName = serializer.CharField(source='former_name')
+/!\ ne pas mettre de virgule à la fin
+- if pr rename un champ ForeignKeyField alors :
+REP : nom_du_club = serializers.PrimaryKeyRelatedField(
+	source="club_pro", queryset=Clubs.objects.all()
+)
+avec la source + un queryset du Model lié par la foreignkey
+sinon il affiche par la valeur ds la page du navigateur
++ il est possible qu'il faille add "to_field=field_name_lié" ds
+  le model contenant la foreignkey
++ possible qu'il faille define des lookup fields ds le serializer
+  file sinon mettre direct fields='__all__' mm si pas recommandé
+
+
+6) l'OBJECTS des models :
+- use objects.filter() to SELECT un champ en fct d'1 WHERE
+- can placer plusieurs champs ds le objects.filter() avc virgule
+- condition OR : séparer les conditions par un |
+- can les chainer: filter(...).count()
+- can faire un print des attributs de l'objet récupéré par get()
+  exemple : updated_statut = StatutWorkflow.objects.get(cle=key)
+            print(updated_statut.libelle) => ça marche MAIS
+MAIS MAIS MAIS
+ATTENTION aux foreignKeyFields qui compliquent tout, faut encore
+chaîner avec des "." pour aller chercher la valeur dans le model
+étranger
+
+
+7) dérouler les items d'un QuerySet :
+
+REP : 
+clubs = Clubs.objects.filter(pays="algerie")
+for club in clubs:
+	print(club.nom, club.pays)
+
+
+8) afficher les champs de la table jointe
+
+REP : ds le serializer, déclarer un new fieldname comme ça
+	pays = serializers.CharField(source="club_pro.pays")
+avc son type,
+club_pro = foreign key,
+pays = champ ciblé ds la table jointe
+
+ça marche aussi avc les OneToOneField en place des ForeignKey
+et 2ème méthode :
+idClasse = serializers.PrimaryKeyRelatedField(
+	source="id_classe",
+	queryset=ClasseDetection.objects.all()
+)
+
+
+9) incruster un model dans un autre model :
+
+
+REP :put "depth = 1" dans le serializer
+
+
+10) filter un objet par sa clé étrangère :
+
+REP : Joueurs.objects.filter(club_pro__pays='algerie')
+avec club_pro = clé étrangère
+et pays = champs ciblé
+
+
+11) faire un double filtre
+
+REP :
+Joueurs.objects.filter(club_pro__pays='algerie', nom='hicham')
+
+
+12) suppr un superuser :
+
+REP :
+> python manage.py shell
+$ from django.contrib.auth.models import User
+$ User.objects.get(username="blabla", is_superuser=True).delete()
+
+
+13) pour modifier le nom d'un projet Django déjà existant
+
+REP : https://stackoverflow.com/questions/18293875/easy-way-to-rename-a-django-project
+
+
+14) pour filtrer un ForeignKey field
+
+REP : fo tjrs mettre un "primary_key=True" sur le champ ciblé
+
+
+15) to use un .get() sur un Model.objects :
+
+REP : tjrs faire un try... except et mettre le Model.DoesNotExist
+      ds le except
+
+
+16) pr faire un vrai PATCH :
+
+REP :
+updated_statut = StatutWorkflow.objects.get(cle=key)
+updated_statut.libelle = data.get("libelle", updated_statut.libelle)
+updated_statut.save()
+serializer = StatutWorkflowSerializer(updated_statut)
+
+17) dans le serializer, pour cacher un champ à update
+
+REP : mettre "write_only=True" dans le champ serializé
+
+
+-------L'UTILISATION d'API_VIEW POUR CREER DES VIEWS--------
+
+1) c'est de la progra fonctionnelle et non basée sur class
+
+retirer les self et modifier les urls.py
+
+
+-------CREATION D'UN SYSTEME D'AUTHENTIFICATION------------
+
+1) avec JWT :
+- pip install pyjwt
+- creer une class User à partir d'AbstractUser en précisant le
+  USERNAME_FIELD correspondant à un champs à UNIQUE=True
+- ds le settings.py entrer : AUTH_USER_MODEL = 'core.User' avc
+  le nom de l'appli à la place de "core"
+- entrer les param de coco à la DB
+- ds le serializers.py créer 1 class UserSerializer avc le mdp en
+  write_only + give him une fct create()
+- ds les views.py créer les class de views
+- add each class de view créée dans le urls.py et créer les routes
+- avant de runserver : makemigrations + migrate
+
+2) si jamais on doit le créer en milieu de code, suivre ce tuto:
+
+https://code.djangoproject.com/ticket/25313

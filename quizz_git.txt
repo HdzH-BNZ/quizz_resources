@@ -1,0 +1,17 @@
+QUIZZ GIT
+
+1) pour créer une nouvelle branche à partir d'une branche
+existante
+
+REP :
+git checkout -b new_branch former_branch
+git status
+git add .
+git commit -m "nom_commit"
+git log
+git push -u remote new_branch
+
+2) pr changer de branche
+
+REP :
+git checkout branche2
