@@ -15,3 +15,24 @@ git push -u remote new_branch
 
 REP :
 git checkout branche2
+
+3) créer une branche "develop" en local puis en remote à partir
+de la branche master
+
+REP :
+git checkout -b develop master 
+git add .
+git commit -m blabla
+git psh -u origin develop => ça crée automatiquement 1 branche
+				develop en remote
+
+4) récup les modif de la branche remote dans celle en local
+
+git checkout branche_en_question
+git pull
+
+5) pr suppr la branche sur laquelle on a dev 1 feature
+
+REP :
+git checkout autre_branche_à_pas_suppr
+git branch -d my_feature

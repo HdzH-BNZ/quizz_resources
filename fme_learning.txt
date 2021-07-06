@@ -1,0 +1,252 @@
+			     FME 
+
+format .FMW = fichier workspace used ds FME Workbench
+
+			  Les READERS
+
+- qd on a plus READERS avc geodata en entrée, can les surligner
+  les 2 et les faire appear les 2 ds la map du VISUAL PREVIEW + si
+  ils ont pas le mm SCR => use le REPROJECTOR then en cliquant sur
+  le reader et le reprojector du mm SCR can les afficher ds une mm
+  carte du VISUAL PREVIEW et if couleur trp similaire, ds DISPLAY
+  CONTROL dérouler le layer reprojeté puis clic droit DRAWING
+  STYLES et changer la couleur/taille etc then can changer l'ordre
+  des layers too
+- les DWG/DXF d'AutoCAD mettre WORKFLOW OPTIONS en SINGLE MERGED
+  FEATURE TYPE sinn il va faire 1 reader par layer
+- les fichiers EXCEL importer le fichier via le READER puis faire
+  direct un RUN et cliquer sur l'oeil à côté du rouage du READER :
+  là ds le VISUAL PREVIEW tout s'affiche + bien faire attention
+  aux champs importés, si on add une colonne a posteriori ça peut
+  le zapper ds le WBench
+- pr les GEODATABASES when on l'importe go ds parameters et select
+  only 1 table à afficher => laisser "Individual Feature Types" 
+  coché sinon si ya plus tables can mettre "Single Merged Feature"
+
+
+                          Les TRANSFORMERS
+
+1) l'ATTRIBUTE MANAGER
+can créer de new attributs ds la table attributaire ou en suppr :
+- ds colonne OUTPUT ATTRIBUTE add new champ et ds ATTRIBUTE VALUE
+  créer une new value ds le TEXT EDITOR (là on peut vraiment
+  écrire du texte entre les valeurs) ou l'ARITHMETIC EDITOR (là on
+  peut add des opérateurs arithmétiques)
+- cliquer sur le rouage de l'AttributeManager et ds colonne ACTION
+  sélectionner l'option REMOVE
+
+si dans le WRITER les data added se manifestent pas, go ds rouage
+du WRITER puis ds l'onglet USER ATTRIBUTES switcher de Manuel vers
+Automatic et revenir vers Manual et ensuite paramétrer le type de
+la donnée en sortie => là le job marche
+
+MS faut s'assurer que le champ ne contient pas que des cellules
+vides sinon ça fctionnera pas
+
+- les FME Feature Functions can ns aider using only Attribute
+  Manager plutôt qu'aller chercher d'autres transformers : exemple
+  can use la fct @Area() pr calculer l'aire de chaque polygone
+- can also poser des conditions ds l'ATTRIBUTE MANAGER : colonne
+  ATTRIBUTE VALUE > conditional value =>
+- ds colonne ACTION can also rename 1 colonne to keep l'output
+  attribute name given
+
+
+2) l'ATTRIBUTE CREATOR
+- plus rapide que le ATTRIBUTE MANAGER et permet de créer 1 champ
+
+3) le REPROJECTOR
+- fo svnt changer couleur/img d'une des layers au moins
+
+4) le BUFFERER
+- rouage > buffer distance + can paramétrer l'unité used
+
+5) le SPATIAL FILTER
+- bien know les spatial predicates à select en paramètres sachant
+  qu'on peut en mettre plusieurs (ex contains + touches)
+- passed =entités vérifiant le spatial filter, failed le contraire
+- très used qd on a un layer à intersecter avc un buffer
+- qd trop de links entre transformers se croisent, clic droit sur
+  les champs du transformer pr modifier leur ordre
+- on enchaine svnt avc 1 STYLER pr mettre en lumière les data qui
+  vérifient le filtre
+
+6) le (KML) STYLER
+- très used avant création d'1 WRITER (KML)
+- pr apply 1 couleur/icone/label particulier à un layer en sortie
+
+7) le STRING REPLACER
+- très used pr formater des NUMBERS en STRINGS MS fo le use après
+  un ATTRIBUTE MANAGER (ex on a 1 colonne 'date' qu'on veut
+  formater => duplique la colonne ds l'AttribManag : payeFormated 
+  et ds la colonne ATTRIBUTE VALUE lui refiler la value de 'date'
+  puis ds le StringReplacer select le champ ciblé (ici le new
+  champ formaté) ds ATTRIBUTES et au MODE choose 'Repl Reg Expr'
+  et entrer l'expression régulière ds TEXT TO REPLACE
+- pour faire l'<=> du Ctrl+F remplacer
+
+8) le LINE BUILDER
+- pr relier des points en entrée (ds leur ordre d'entrée) pr
+  qu'ils forment un polygone => used pr créer un réseau sur lequel
+  faire du routing comme Dijkstra ou ShortestPathFinder
+
+9) le DISSOLVER
+- pr dissolve un layer 
+
+10) l'ATTRIBUTE SPLITTER
+- pr rename des champs ou values en insérant un delimiter ou autre
+  ça peut être intéressant qd on doit passer d'1 camelCase, d'1
+  PascalCase ou d'un snake_case
+
+11) le FEATURE JOINER
+- pr faire des LEFT/RIGHT JOIN entre layers
+
+12) le ATTRIBUTE VALUE MAPPER
+- pr comparer des valeurs attributaires d'1 table à 1 LookUpTable
+  et lui assigner de new values qd ça match
+- très used to add 1 column en fct des différentes catégories d'1
+  autre colonne
+
+13) le CREATOR
+- crée des features using les paramètres fournis (MS en gros les
+  param par déf st suffisants)
+- très svnt suivi d'1 FEATURE READER
+
+14) le TESTER
+- 
+
+15) le TESTER_FAILED
+- 
+
+16) le AREA CALCULATOR
+- 
+
+17) le STATISTIC CALCULATOR
+-
+
+18) le ATTRIBUTE ROUNDER
+- 
+
+19) l'EXPRESSION EVALUATOR
+- 
+
+20) le SPATIAL SORTER
+-
+
+21) le SAMPLER
+- to select un échantillon N de data selon des sampling types 
+  différents
+
+22) le GOEID Generator
+- il calcule un Geographic Object IDentifier for each feature et
+  l'add as a new attribut
+- ds les tuto advanced FME il sert à build un PROPERTY_ID
+
+23) le TEST FILTER
+- permet de gérer des CONDITIONAL VALUES à partir d'1 layer
+
+24) le HTTP CALLER
+- pr se connect à 1 API : needs l'URL + l'argument GET, POST etc
+- tjrs précédé d'1 READER ou d'1 CREATOR (avc c bien car il te
+  crée direct une colonne response_body avc les data en JSON deds
+  et 1 colonne http_status_code)
+- can save la response ds 1 fichier ou 1 attribut
+- svnt suivi d'1 JSON FRAGMENTER qui permet de récup le JSON de la
+  colonne response_body : Input Source = JSON Attribute, puis JSON
+  Attribute, then remplir le JSON Query par 'json[*]' pr dérouler
+  les data au sein du JSON et cocher en dessous 'Yes', puis dans
+  Flatenning cocher 'Yes' aux 2 premiers champs puis remplir le
+  Attributes To Expose avc les intitulés qu'on donnera aux new
+  champs (suffit de les espacer pr les distinguer no need virgule)
+
+25) l'ATTRIBUTE FILE WRITER
+- écrit le contenu d'un attribut particulier ds un file à part
+
+26) le STRING CONCATENATOR
+- laisser en mode Create New Attribute et give un nom au new champ
+- ds le tableau STRING PARTS entrer les valeurs attributaires et
+  les constantes et can see le résultat en bas
+
+27) le WORKSPACE RUNNER
+- il call un autre workbench pr le run
+
+28) le GEOMETRY FILTER
+- permet de passer d'1 format de géométrie à un autre (ex le
+  format 'geom' de postgis can be transformé en géométrie lisible
+  par FME si on choose 'Hex Encoded OGC Well Known Binary' ds le
+  champs 'Geometry Encoding' et 'No' pr 'Remove Attribute'
+- svnt suivi d'1 GEOMETRY VALIDATOR pr détecter les issues
+
+29) le LIST CONCATENATOR
+- permet de chaîner toutes les values d'1 mm attribut
+
+30) le DUPLICATE FILTER
+
+31) le CENTER POINT REPLACER
+
+32) le BULK ATTRIBUTE RENAMER
+- pr rename des attributs using REGEX
+
+33) le FEATURE MERGER
+
+34) le BOUNDING BOX REPLACER
+
+35) le CENTER LINE REPLACER
+
+36) le ATTRIBUTE ROUNDER
+
+37) le CIRCULARITY CALCULATOR
+
+38) le CENTER POINT EXTRACTOR
+
+39) le GEOMETRY EXTRACTOR
+
+40) le SPATIAL RELATOR
+
+41) le PYTHON CALLER
+
+42) le OFFSETTER
+
+43) le LIST SUMMER
+
+44) le CLONER
+
+45) le MODULO COUNTER
+
+46) le LIST ELEMENT COUNTER
+
+47) le LIST EXPLODER
+
+48) le SQL CREATOR
+- permet executer du SQL depuis FME vers la DB Postgis (fo que
+  postgis soit déjà installé sur la DB sinon ça fail car il fait
+  automatiquement un select_postgis_version())
+
+49) le STRING PADDER
+
+50) le STRING FORMATTER
+- faut juste mentionner les champs à transformer en string ds le
+  champ ATTRIBUTES puis ds le champ FORMAT STRING fo mettre 's'
+  (ya d'autres lettre dispo pr d'autres types data)
+- if on veut transformer des nombres en code à 5 chiffres adding
+  des 0 à gauche, écrire ça : 05s
+
+51) le STRING CASE CHANGER
+- pour passer des values du LOWERCASE au UPPERCASE et inversement 
+
+			  Les WRITERS
+1) KML
+- une fois l'emplacement/filename found, puis ds Feature Type 
+  Definition select "automatic" puis une fenêtre va pop => lui 
+  give un Feature Type Name
+- can suppr les champs dont on veut pas
+
+2) HTML
+- can sortir des tableaux/graphes/map au format HTML MS faut le 
+  précéder d'1 HTMLReportGenerator
+
+3) le FEATURE WRITER
+- permet de créer 1 SHP à partir n'importe quel format geodata
+
+4) le CSV
+- tjrs bien d'écrire les erreurs ds un CSV
