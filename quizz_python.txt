@@ -1,0 +1,12 @@
+QUIZZ PYTHON
+
+1) pr importer une variable d'environnement :
+
+REP :
+import os
+...
+os.getenv('NOM_VAR_DENVIRONNEMENT')
+
+2) pr faire un request.patch en test :
+
+REP : préciser en attribut json = l'objet à passer dans le patch

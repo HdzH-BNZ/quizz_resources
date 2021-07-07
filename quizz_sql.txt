@@ -1,0 +1,219 @@
+Mon Quizz PostgreSQL :
+
+1) insérer des data ds une table
+
+2) créer un RÔLE
+
+REP :
+CREATE ROLE readonly;
+GRANT CONNECT ON DATABASE db_anakin TO readonly;
+GRANT USAGE ON SCHEMA public TO readonly;
+GRANT SELECT ON TABLE test, test_bis TO readonly;
+
+CREATE ROLE readwrite;
+GRANT CONNECT ON DATABASE db_anakin TO readwrite;
+GRANT USAGE, CREATE ON SCHEMA public TO readwrite;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE test, test_bis TO readwrite;
+-- can also écrire : 
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite;
+
+/!\ SERIAL = pseudo-type de PG qui est en vrai un simple integer
+qui dépend d'une séquence donc fo GRANT sur les séquences too
+
+3) créer un USER et lui appliquer le RÔLE créé
+
+REP:
+CREATE USER anakin WITH LOGIN PASSWORD 'anakin';
+GRANT readonly TO anakin;
+
+CREATE USER scofield WITH LOGIN PASSWORD 'scofield';
+GRANT readwrite TO scofield;
+
+
+4) attribuer un OWNER à une DATABASE
+
+REP : 
+CREATE DATABASE db_anakin WITH OWNER anakin ENCODING='UTF8'; 
+
+5) Modifier le OWNER de la DB vers un autre OWNER
+
+REP :ALTER DATABASE db_anakin OWNER TO postgres;
+
+6) faire une conversion de type de data 
+
+REP : (ST_Area(b.the_geom))::int as surface_buildings
+
+7) add une clé primaire non-nulle qui s'autoincrémente
+
+REP : pk_id serial primary key not null
+
+8) transformer une donnée geometry en text
+
+REP : ST_AsText(ST_CENTROID(b.the_geom)) as text_centroid
+
+9) créer une contrainte de clés primaires entre 2 tables
+
+REP :
+CREATE TABLE IF NOT EXISTS test (
+	id serial primary key not null,
+	nom_structure text,
+	id_libelle int not null,
+	CONSTRAINT fk_libelle
+		FOREIGN KEY (id_libelle)
+			REFERENCES libelle(pk_id)
+)
+
+ça ne fonctionne que si la table externe possède une clé unique
+dc only avc un champ ID serial primary key
+
+10) placer une apostrophe ds un format TEXT en SQL
+
+REP : doubler l'apostrophe ds la chaîne de caractère
+
+11) en psql lister les roles/schemas/tables/extensions d'1 DB
+
+REP : \du ou \du+, \dn, \dt ou \dp, \dx, \ds (sequences)
+
+12) se connecter à 1 DB précise en PSQL
+
+REP: \c db_name
+
+
+13) quitter psql
+
+REP : \q
+
+14) est-ce que le UNIQUE(champ1, champ2, ...) fonctionne ?
+
+REP : NON, faut add UNIQUE to each champ qui en nécessite
+
+15) pr suppr une valeur ou catégorie de valeur d'1 seule table
+
+REP : DELETE FROM public.detection WHERE id_detection = 2;
+
+16) créer une table à partir d'un SELECT STATEMENT
+
+REP : 
+CREATE TABLE IF NOT EXISTS buildings_bis AS (
+	SELECT *
+	FROM td_postgis.buildings
+)
+
+
+17) pr modifier une contrainte :
+
+REP : can't ma modifier direct, fo la suppr puis la recréer
+
+ALTER TABLE IF EXISTS joueurs
+DROP CONSTRAINT fk_club_joueur, 
+ADD CONSTRAINT fk_club_joueur 
+	FOREIGN KEY (club_pro) REFERENCES clubs(nom) 
+	ON UPDATE RESTRICT;
+
+18) pr add une double contrainte on update/on delete :
+
+
+REP : ADD CONSTRAINT fk_club_joueur 
+	FOREIGN KEY (club_pro) REFERENCES clubs(nom) 
+	ON UPDATE CASCADE ON DELETE CASCADE;
+
+19) pr copier les data d'un CSV vers une table PG :
+
+REP :
+COPY sample_table_name
+FROM 'C:\sampledb\sample_data.csv' 
+DELIMITER ',' 
+CSV HEADER;
+
+20) pr changer le type d'une colonne d'une table :
+
+REP : 
+ALTER TABLE table_name
+ALTER COLUMN column_name1 TYPE new_data_type
+
+21) to drop a constraint UNIQUE dont on a pas précisé le nom :
+
+REP :
+- pr trouver son nom :
+	SELECT conname
+	FROM pg_constraint
+	WHERE conrelid = 'nom_de_la_table'::regclass
+	AND contype = 'u';
+- pr suppr la contrainte :
+ALTER TABLE nom_de_la_table
+DROP CONSTRAINT nom_de_la_contrainte;
+
+22) pr modifier la valeur d'1 colonne AGE sur all lignes de
+    la table JOUEURS
+
+REP :
+UPDATE joueurs
+SET age = 10;
+
+23) créer une table à partir d'1 selection :
+
+REP : CREATE TABLE IF NOT EXISTS public.pays AS 
+	SELECT * FROM bis_schema.pays
+
+
+24) pr update un champ avec des valeurs RANDOM sans changer type
+
+REP :
+UPDATE salaires
+SET taux = random();
+
+
+25) pr update plusieurs champs d'1 mm table :
+
+REP : 
+UPDATE salaires
+SET champ1 = ROUND(random()::numeric, 2), champ2 = random();
+
+
+26) pour réinitialiser une séquence
+
+REP :
+ALTER SEQUENCE nom_sequence RESTART;
+
+27) INSERT INTO la table d'un schema B à partir de la mm table du 
+schema A mais avec une clé primaire qui commence à 1 tandis que
+la clé primaire de la table du schema A commence à 100 :
+
+REP :
+INSERT INTO schemaB.table
+	SELECT ROW_NUMBER() OVER(id) as id, champ1, champ2
+	FROM schemaA.table;
+
+28) pr suppr des lignes d'1 table
+
+REP :
+DELETE FROM table1
+WHERE condition;
+
+29) pr suppr l'extension postgis de la DB :
+
+REP :
+DROP extension Postgis;
+
+30) pr changer le schema d'accueil de postgis vers un new schema
+
+REP :
+ALTER DATABASE db_name SET search_path = public, new_schema
+
+31) suppr doublons de la table detection
+
+REP :
+DELETE FROM
+	detection a
+		USING detection b
+WHERE a.id < b.id AND a.id_detection = b.id_detection;
+
+32) pr update les champs d'1 table detection à partir des données
+de la mm table detection d'un autre schema
+
+REP:
+UPDATE schema2.detec AS d1
+SET occ_detec = d2.occ_detec
+FROM (
+	SELECT *
+	FROM schema1.detec
