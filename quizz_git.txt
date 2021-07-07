@@ -68,7 +68,7 @@ select la base (branche qui va recevoir le merge)
 ajouter une description
 cliquer sur "create pull request"
 vérifier que la branche "has no conflicts with the base branch"
-cliquer sur "merge pull request"
+cliquer sur "merge pull request" 
 cliquer sur "confirm merge"
 cliquer sur "delete branch"
 
