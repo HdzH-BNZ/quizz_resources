@@ -1,4 +1,6 @@
-QUIZZ GIT
+			QUIZZ GIT
+- si les branches de dev sont déjà créées, tjrs begin avec un
+  git pull pr reload les modif sur le dépôt distant
 
 1) pour créer une nouvelle branche à partir d'une branche
 existante
@@ -15,3 +17,61 @@ git push -u remote new_branch
 
 REP :
 git checkout branche2
+
+3) créer une branche "develop" en local puis en remote à partir
+de la branche master
+
+REP :
+git checkout -b develop master 
+git add .
+git commit -m blabla
+git push -u origin develop => ça crée automatiquement 1 branche
+				develop en remote
+
+4) récup les modif de la branche remote dans celle en local
+
+git checkout branche_en_question
+git pull
+
+5) pr suppr la branche sur laquelle on a dev 1 feature
+
+REP :
+git checkout autre_branche_à_pas_suppr
+git branch -d my_feature
+
+
+6) pr comparer 2 branches entre elles
+
+REP:
+git diff branch1..branch2
+
+7) sur Gitlab pr faire une MR (merge request)
+
+REP :
+pousser la new branche sur le repo distant
+cliquer sur l'onglet "branch" colonne gauche
+cliquer sur le bouton "merge request" de la branche ajoutée
+ajouter une description
+assigner un auteur de cette MR (moi)
+assigner qqun à la relecture (reviewer)
+cocher "delete source branch..."
+cliquer sur "create merge request"
+et là faut attendre que ce soit Approve + Merge par le reviewer
+
+7bis) sur Github pr faire une PR (pull request <=> gitlab's MR)
+
+8) sur les anciennes versions de Git : suppr un dossier en local
+et push la suppr sur le git distant
+
+REP :
+faire un git add nom_du_dossier_où_ya_la_suppression
+puis un git add -A (sinon il save pas les paths supprimés)
+et commiter ensuite comme d'habitude
+
+9) pr reload un dossier qu'on vient de suppr en local MS tjrs
+dispo en remote :
+
+REP:
+git fetch
+git checkout HEADER path/to/your/dir/or/file
+avec path =! dossier où ya le git local
