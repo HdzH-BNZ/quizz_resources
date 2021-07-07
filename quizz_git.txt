@@ -58,6 +58,8 @@ cocher "delete source branch..."
 cliquer sur "create merge request"
 et là faut attendre que ce soit Approve + Merge par le reviewer
 
+7bis) sur Github pr faire une PR (pull request <=> gitlab's MR)
+
 8) sur les anciennes versions de Git : suppr un dossier en local
 et push la suppr sur le git distant
 
