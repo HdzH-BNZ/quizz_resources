@@ -60,6 +60,19 @@ et là faut attendre que ce soit Approve + Merge par le reviewer
 
 7bis) sur Github pr faire une PR (pull request <=> gitlab's MR)
 
+REP:
+pousser la new branche sur le repo distant
+cliquer sur la liste des branches sur Github
+cliquer sur "new pull request" sur la new branche poussée
+select la base (branche qui va recevoir le merge)
+ajouter une description
+cliquer sur "create pull request"
+vérifier que la branche "has no conflicts with the base branch"
+cliquer sur "merge pull request"
+cliquer sur "confirm merge"
+cliquer sur "delete branch"
+
+
 8) sur les anciennes versions de Git : suppr un dossier en local
 et push la suppr sur le git distant
 
