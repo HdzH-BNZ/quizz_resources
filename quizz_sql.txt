@@ -1,6 +1,18 @@
 Mon Quizz PostgreSQL :
 
-1) insérer des data ds une table
+1) afficher la version used de PG :
+
+REP :
+SELECT version();
+SELECT PostGIS_Version();
+
+1.1) vérifier que la version de postgis est bien la bonne
+
+
+REP :
+ALTER EXTENSION postgis 
+UPDATE TO "2.5.3"; => renvoie un message d'erreur comme quoi cest
+déjà installé
 
 2) créer un RÔLE
 
@@ -156,7 +168,8 @@ REP : CREATE TABLE IF NOT EXISTS public.pays AS
 	SELECT * FROM bis_schema.pays
 
 
-24) pr update un champ avec des valeurs RANDOM sans changer type
+24) pr update un champ avec des valeurs RANDOM entre 0 et 1 MS 
+sans changer de type
 
 REP :
 UPDATE salaires
@@ -217,3 +230,43 @@ SET occ_detec = d2.occ_detec
 FROM (
 	SELECT *
 	FROM schema1.detec
+
+33) pr changer postgis de schema
+
+REP:
+-- création de l'extensin
+CREATE EXTENSION postgis;
+  
+-- mise à jour de l'extension postgis
+UPDATE pg_extension 
+  SET extrelocatable = TRUE 
+    WHERE extname = 'postgis';
+ 
+-- on changer de schema
+ALTER EXTENSION postgis 
+  SET SCHEMA test;
+
+-- select la version used de Postgis
+SELECT test.PostGIS_Version();
+
+-- vérifie que la version de postgis est bien la bonne
+ALTER EXTENSION postgis 
+  UPDATE TO "2.5.3";
+
+-- si on souhaite créer une table dans le schema public MM si 
+-- postgis ds other schema : fo préciser le schema having le type
+-- geometry ds la création du champs
+CREATE TABLE IF NOT EXISTS pays (
+	id serial primary key not null,
+	nom varchar(255) UNIQUE,
+	geom test.geometry
+);
+
+-- pr insérer des valeurs 
+INSERT INTO pays (nom, geom) 
+VALUES ('algerie', 'POINT(0 0)');
+
+sauf que si on fait un inspect db sur le schema public qui 
+contient pas postgis, la commande va pas fonctionner
+==> fo donc ajouter le search_path en options ds 'OPTIONS' ds le
+module DATABASES du settings.py
