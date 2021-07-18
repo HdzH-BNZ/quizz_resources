@@ -1,0 +1,45 @@
+quizz batch
+
+1) pr run un script .bat :
+
+REP :
+entrer dans la console au mm niveau que le fichier :
+filename.bat
+
+2) pr désactiver les commentaires batch à each run d'1 .bat :
+
+REP:
+dès la 1ère ligne de script, put:
+@echo off
+
+3) pr écrire un commentaire ds le code sans le print ds console
+
+REP:
+:: mon premier commentaire
+
+4) pr print un message dans la console :
+
+REP:
+echo my first print
+
+5) pr déclarer une variable puis l'appeler :
+
+REP :
+set MY_VARIABLE=12
+/!\ fo jamais mettre d'espaces entre le "=" et les 2 termes
+%MY_VARIABLE%
+
+6) pr mettre fin au run du script:
+
+REP:
+écrire ça à la dernière ligne du script:
+endlocal
+
+
+7) pr call les variables stockées ds un fichier de config:
+
+REP:
+set v=./conf.cfg
+for /F "tokens=*" %%a in (%v%) do (
+    set "%%a"
+)

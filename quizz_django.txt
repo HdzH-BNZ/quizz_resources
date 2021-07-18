@@ -139,6 +139,23 @@ serializer = StatutWorkflowSerializer(updated_statut)
 
 REP : mettre "write_only=True" dans le champ serializé
 
+18) si on veut modifier une valeur d'1 champ serializé sans pour
+autant modifier la mm valeur ds la DB :
+
+REP :
+for p in pays:
+        if p.nom == 'maroc':
+            p.nom = 'Maroc
+
+18) désactiver l'interface web du navigateur pr tte vue DRF
+
+REP:
+REST_FRAMEWORK = {
+	'DEFAULT_RENDERER_CLASSES': (
+		'rest_framework.renderers.JSONRenderer',
+		)
+	}
+
 
 -------L'UTILISATION d'API_VIEW POUR CREER DES VIEWS--------
 

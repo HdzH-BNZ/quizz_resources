@@ -270,3 +270,45 @@ sauf que si on fait un inspect db sur le schema public qui
 contient pas postgis, la commande va pas fonctionner
 ==> fo donc ajouter le search_path en options ds 'OPTIONS' ds le
 module DATABASES du settings.py
+
+34) pr formater une date en JJ/MM/YY depuis un serializer :
+
+REP :
+myDate = serializers.DateField(source="formerDate", 
+				format="%d/%m/%Y")
+
+35) pr add une colonne :
+
+REP:
+ALTER TABLE my_table
+ADD COLUMN new_column integer;
+
+/!\ attention, dès qu'on a ajouté une colonne ds une table qui
+possède déjà des lignes, automatiquement PG leur donne des
+valeurs nulles NULL => dc on peut pas mettre une contrainte
+NOT NULL au moment de la création de la colonne ! il faut update
+les valeurs de la colonne puis faire un :
+ALTER TABLE new_table
+ALTER COLUMN new_column SET NOT NULL;
+
+36) pr modifier des valeurs selon des conditions (as IF/ELSE):
+
+REP :
+UPDATE test.pays
+SET nom = CASE
+		WHEN id = 12 THEN 'yemen'
+		WHEN id = 13 THEN 'eau'
+		ELSE nom
+	END;
+
+/!\ pr un UPDATE + complexe avec jointure :
+UPDATE test.demographie AS d
+SET population = CASE
+			WHEN p.nom = 'algerie' THEN 45
+			WHEN p.nom = 'egypte' THEN 100
+			ELSE population
+		END
+FROM test.pays AS p
+WHERE d.pays = p.nom;
+--ne pas mettre l'indicateur 'd.' dans le SET ni le ELSE 
+--MAIS only ds le WHERE
