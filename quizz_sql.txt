@@ -271,11 +271,11 @@ contient pas postgis, la commande va pas fonctionner
 ==> fo donc ajouter le search_path en options ds 'OPTIONS' ds le
 module DATABASES du settings.py
 
-34) pr formater une date en JJ/MM/YY depuis un serializer :
+34) faire tourner postgis sur 2 schemas différents sur 1 mm DB
 
-REP :
-myDate = serializers.DateField(source="formerDate", 
-				format="%d/%m/%Y")
+REP: impossible (j'ai testé sur le schema public et un 2nd schema
+                 test et impossible de recréer l'extension postgis
+                 sur public)
 
 35) pr add une colonne :
 
@@ -312,3 +312,51 @@ FROM test.pays AS p
 WHERE d.pays = p.nom;
 --ne pas mettre l'indicateur 'd.' dans le SET ni le ELSE 
 --MAIS only ds le WHERE
+
+37) pr créer/suppr un schéma:
+
+REP:
+CREATE SCHEMA testbis;
+DROP SCHEMA testbis;
+
+38) pr compter le nombre de vertex d'1 polygone
+
+REP : compter son nombre de points
+SELECT SUM(ST_NPoints(geom))
+FROM my_table;
+
+39) pour créer/suppr un schema
+
+REP:
+CREATE SCHEMA testbis;
+DROP SCHEMA testbis;
+
+40) pr réunir 2 select d'1 mm table ds une seule table :
+
+REP:
+SELECT *
+	FROM test.pays
+	WHERE nom = 'algerie'
+UNION
+SELECT *
+	FROM test.pays
+	WHERE nom = 'tunisie'
+/!\ MS si on veut placer un LIMIT ou ORDER BY ds un des SELECT
+faut mettre la requête entre parenthèses:
+(SELECT *
+	FROM test.pays
+	LIMIT 10)
+UNION
+SELECT *
+	FROM test.pays
+	WHERE nom = 'tunisie'
+
+41) pour lire le search_path :
+
+REP:
+SHOW search_path(); => par défaut c'est le schema public
+
+42) pr remettre par défaut le GUI PgAdmin :
+
+REP:
+file > reset layout

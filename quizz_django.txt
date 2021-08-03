@@ -49,7 +49,11 @@ sinon il affiche par la valeur ds la page du navigateur
 6) l'OBJECTS des models :
 - use objects.filter() to SELECT un champ en fct d'1 WHERE
 - can placer plusieurs champs ds le objects.filter() avc virgule
-- condition OR : séparer les conditions par un |
+- condition OR : séparer les conditions de champs par un |
+- can filter multiple values pr un seul champ avec "__in"
+  ex : 
+      valuesList = ['algerie']
+      pays = Pays.objects.filter(nom__in=valuesList)
 - can les chainer: filter(...).count()
 - can faire un print des attributs de l'objet récupéré par get()
   exemple : updated_statut = StatutWorkflow.objects.get(cle=key)
@@ -143,9 +147,11 @@ REP : mettre "write_only=True" dans le champ serializé
 autant modifier la mm valeur ds la DB :
 
 REP :
+- dans la view après le Pays.objects.all():
 for p in pays:
         if p.nom == 'maroc':
             p.nom = 'Maroc
+- ou bien dans le serializer :
 
 18) désactiver l'interface web du navigateur pr tte vue DRF
 
@@ -156,12 +162,41 @@ REST_FRAMEWORK = {
 		)
 	}
 
+19) pr formater une date en JJ/MM/YY depuis un serializer :
+
+REP :
+myDate = serializers.DateField(source="formerDate", 
+				format="%d/%m/%Y")
+
+20) pr gérer les permissions
+
+REP:
+créer un fichier safelist.py ds le dossier API et add une liste
+d'IPs à aller filtrer et y créer une classe étendue de la classe
+BasePermission du module permissions de rest_framework.
+Ensuite add le paramètre DEFAULT_PERMISSION_CLASSES ds le fichier 
+settings.py (ds l'objet REST_FRAMEWORK) et indiquer le chemin du
+fichier safelist.py avec la notation pointée
+
+-------Le WORKFLOW de Django REST Framework-----------------
+
+Les permissions sont check at the very start of the view avant mm
+que le body de la view soit exécutée. Si la permission fail au
+moment d'appeler la view, alrs ça crée une erreur 403. ça peut
+also créer une erreur 401 en fct du syst d'authentication. If ya
+pas de paramètre de permissions, par défaut l'API fonctionnera avc
+la valeur AllowAny
+
 
 -------L'UTILISATION d'API_VIEW POUR CREER DES VIEWS--------
 
 1) c'est de la progra fonctionnelle et non basée sur class
 
 retirer les self et modifier les urls.py
+
+2) l'avantage des class sur les fonctional views :
+
+l'héritage qui évite la redondance
 
 
 -------CREATION D'UN SYSTEME D'AUTHENTIFICATION------------

@@ -88,3 +88,4 @@ REP:
 git fetch
 git checkout HEADER path/to/your/dir/or/file
 avec path =! dossier où ya le git local
+

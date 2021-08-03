@@ -1,0 +1,59 @@
+				A TESTER
+
+- geoserver avec une couche having plusieurs colonnes geometry
+
+- PG avec plus colonnes geom sur une mm table
+
+- QGIS Modeler (le FME de QGIS MS ya pas de FME Server-like là)
+
+- gérer la transparence d'un .SLD ds Geoserver
+
+- archiver une DB
+
+
+
+centroid each side of a polygon
+buffer circulaire around the centroid
+st_angle = 90° entre l'extremite d'1 side, le centroid et un point
+         du cercle
+prolonger la demie droite centroid - point du cercle choisi
+trouver le point intersectant la demie droit et le side en face
+relier ces 2 points as axe symetrie et cut le polygon en 2
+select le polygon avc la plus grande surface et le superposer 
+symetriquement au polygon à la moins grande surface
+
+
+/*
+SELECT 
+			ST_Azimuth(
+				ST_Point(25, 45),
+				ST_Point(75, 100)) AS degA_B,
+		
+			ST_Azimuth(
+				ST_Point(75, 100),
+				ST_Point(25, 45)) AS degB_A;
+*/
+
+-- tuto GIS stack exchange
+WITH segments AS (
+    SELECT id, ST_AsText(ST_MakeLine(lag((pt).geom, 1, NULL) OVER (PARTITION BY id ORDER BY id, (pt).path), (pt).geom)) AS geom
+    FROM (
+			SELECT b.id, ST_DumpPoints(b.geom) AS pt 
+			FROM (
+					SELECT id, ST_ExteriorRing(the_geom) as geom
+					FROM buildings_bis
+				) as b
+		) as dumps
+    )
+
+SELECT *,
+		ST_OffsetCurve(ST_GeomFromText(geom), 3, 'quad_segs=4 join=round'),
+		ST_MakeLine(
+			ST_Centroid(geom), 
+			ST_Centroid(ST_OffsetCurve(ST_GeomFromText(geom), 3, 'quad_segs=4 join=round'))
+			)
+		--ST_Union(ST_OffsetCurve(ST_GeomFromText(geom), 2, 'quad_segs=4 join=round'),ST_OffsetCurve(ST_GeomFromText(geom), -2, 'quad_segs=4 join=round'))
+FROM segments WHERE geom IS NOT NULL;
+
+
+
