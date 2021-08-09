@@ -95,3 +95,10 @@ REP :
 Settings > General > Merge requests => choose la last MR et
 cliquer sur le btn REVERT
 
+
+11) pr faire un git revert ( /!\ c super compliqué de revenir en 
+arrière ensuite)
+
+REP:
+- git log => to recup le last commit_id
+- git revert commit_id
