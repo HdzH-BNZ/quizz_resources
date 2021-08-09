@@ -1,0 +1,24 @@
+COMMANDES BASH
+
+
+1) toujours commencer par ?
+
+REP:
+#!/bin/bash
+
+2) to write un commentaire:
+
+REP:
+#blabla
+
+3) to print un truc ds la console:
+
+REP:
+echo blabla
+
+4) to create then call a variable
+
+REP:
+DB_NAME=geomatiquem2
+...
+$DB_NAME => fo tjrs use le $ pr call 1 var

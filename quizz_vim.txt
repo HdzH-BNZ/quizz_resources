@@ -1,0 +1,27 @@
+			COMMANDES VIM
+
+1) to open a bash script with vim (ça marche avc nimp quel file) :
+
+REP:
+vim file_name.sh
+
+2) passer en mode insertion:
+
+REP:
+taper "i" n'importe où then use les flèches directionnels
+
+3) to save les modifs après le mode insertion:
+
+REP:
+escap => :wq!
+
+4) to leave le file without any save:
+
+REP:
+:q!
+
+5) to add les litérauts de gabarits
+
+REP:
+ctrl + alt sur la touche 6 et ensuite retaper sur la touche 6
+sans le ctrl + alt

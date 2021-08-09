@@ -360,3 +360,8 @@ SHOW search_path(); => par défaut c'est le schema public
 
 REP:
 file > reset layout
+
+43) quelle diff entre != et <> ?
+
+REP:
+aucune
