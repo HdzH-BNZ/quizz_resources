@@ -331,7 +331,8 @@ REP:
 CREATE SCHEMA testbis;
 DROP SCHEMA testbis;
 
-40) pr réunir 2 select d'1 mm table ds une seule table :
+40) pr réunir 2 select d'1 mm table ds une seule table (requête
+combinée) :
 
 REP:
 SELECT *
@@ -351,6 +352,10 @@ SELECT *
 	FROM test.pays
 	WHERE nom = 'tunisie'
 
+/!\ au UNION ALL qui, dans le cas où on a 2 lignes identiques sur
+les 2 tables, va doubler cette ligne identique sur la table
+résultant de la requête combinée
+
 41) pour lire le search_path :
 
 REP:
@@ -365,3 +370,90 @@ file > reset layout
 
 REP:
 aucune
+
+44) pr filtrer la diff entre 2 select (called COMBINING QUERIES ou
+requêtes combinées) :
+
+REP:
+SELECT *
+FROM table1
+	INTERSECT
+SELECT *
+FROM table2;
+
+45) pr select que les data dispo ds table1 et absentes de table2:
+
+REP:
+SELECT *
+FROM table1
+	EXCEPT
+SELECT *
+FROM table2;
+
+46) l'équivalent du PROJECT operator :
+
+REP:
+SELECT DISTINCT, avec le DISTINCT qui permet d'éliminer les
+duplicatas ou copies
+
+47) l'équivalent du RENAME operator en algèbre relationnel:
+
+REP:
+AS
+
+48) pr créer une séquence customisée:
+
+REP:
+CREATE SEQUENCE mysequence
+INCREMENT 5
+START 100;
+
+49) qd utilise-t-on nextval() ?
+
+REP:
+pr manipuler des séquences
+
+50) créer une fonction simple en SQL
+
+REP:
+CREATE OR REPLACE FUNCTION quick_select (i varchar) 
+RETURNS TABLE (id integer, pays varchar) AS
+$$
+	SELECT *
+	FROM table1
+	WHERE pays = i
+$$
+LANGUAGE SQL;
+
+-- pr appeler la fonction:
+SELECT quick_select('algerie');
+
+/!\ pr créer des fct + complexes fo passer en PL/pgsql if need par
+exemple des var à déclarer, des boucle for loop etc
+
+51) quels sont les 3 composantes de SQL ?
+
+REP:
+- DDL: data definition language
+- DML: data manipulation language (INSERT UPDATE DELETE SELECT)
+- DCL: data control language
+--sinon, SELECT, UPDATE etc st des KEYWORDS whereas TABLE, SCHEMA
+etc st des IDENTIFIERS soit des noms d'objets de la DB
+
+52) how appelle-t-on un SELECT où tu listes les champs ?
+
+REP:
+un select-list
+
+53) pr créer une RULE qui ordonne l'insertion de données ds la
+table2 après insertion des mm données ds table1 :
+
+REP:
+CREATE OR REPLACE RULE add_pays_asie_on_table2
+AS ON INSERT TO table1
+DO
+INSERT INTO table2(pays)
+VALUES (new.pays);
+ 
+INSERT INTO table1 (pays)
+VALUES ('djibouti'); ==> ça marche !

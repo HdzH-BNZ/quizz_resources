@@ -102,3 +102,12 @@ arrière ensuite)
 REP:
 - git log => to recup le last commit_id
 - git revert commit_id
+
+12) pr faire un git revert sur remote repo qu'on vient de cloner:
+/!\ ya plein de soucis de merge_conflits
+
+REP:
+- git clone url.git
+- sur la page du repo cloné, cliquer sur "commit" avc l'horloge
+- select un commit en cliquant sur l'onglet pile to recup son id
+- git revert -m 1 id_commit
