@@ -10,7 +10,7 @@
 
 - archiver une DB
 
-
+- le chiffrement RSA keys
 
 centroid each side of a polygon
 buffer circulaire around the centroid
@@ -34,9 +34,16 @@ SELECT
 				ST_Point(25, 45)) AS degB_A;
 */
 
--- tuto GIS stack exchange
+DROP VIEW IF EXISTS v_double_polygon;
+CREATE OR REPLACE VIEW v_double_polygon AS
+-- pr créer les médiatrices
+WITH mediatrices AS (
+DROP TABLE IF EXISTS mediatrices_v2;
+CREATE TABLE IF NOT EXISTS mediatrices_V2 AS (
 WITH segments AS (
-    SELECT id, ST_AsText(ST_MakeLine(lag((pt).geom, 1, NULL) OVER (PARTITION BY id ORDER BY id, (pt).path), (pt).geom)) AS geom
+    SELECT id, 
+		ST_AsText(
+			ST_MakeLine(lag((pt).geom, 1, NULL) OVER (PARTITION BY id ORDER BY id, (pt).path), (pt).geom)) AS geom
     FROM (
 			SELECT b.id, ST_DumpPoints(b.geom) AS pt 
 			FROM (
@@ -47,13 +54,68 @@ WITH segments AS (
     )
 
 SELECT *,
-		ST_OffsetCurve(ST_GeomFromText(geom), 3, 'quad_segs=4 join=round'),
+		--ST_OffsetCurve(ST_GeomFromText(geom), 3, 'quad_segs=4 join=round') as cote_wanted,
 		ST_MakeLine(
-			ST_Centroid(geom), 
-			ST_Centroid(ST_OffsetCurve(ST_GeomFromText(geom), 3, 'quad_segs=4 join=round'))
-			)
+			--ST_Centroid(geom),
+			ST_Point(ST_X(ST_Centroid(geom)),ST_Y(ST_Centroid(geom)) - 10),
+			ST_Centroid(ST_OffsetCurve(ST_GeomFromText(geom), 100, 'quad_segs=4 join=round'))
+			) as new_mediatrice,
+		ST_Length(
+			ST_GeomFromText(geom)
+		) as longueur,
+		ST_Srid(geom),
+	ST_X(ST_Centroid(geom)) - 1 as longitude,
+	ST_Y(ST_Centroid(geom)) - 1 as latitude
 		--ST_Union(ST_OffsetCurve(ST_GeomFromText(geom), 2, 'quad_segs=4 join=round'),ST_OffsetCurve(ST_GeomFromText(geom), -2, 'quad_segs=4 join=round'))
-FROM segments WHERE geom IS NOT NULL;
+FROM segments 
+WHERE geom IS NOT NULL
+ORDER BY longueur DESC
+LIMIT 1
+)
 
+SELECT b.*, ST_Touches(ST_Transform(ST_SetSrid(m.geom,2154), 2154), 
+					   ST_Transform(ST_SetSrid(b.the_geom,2154), 2154)
+			) as crosses,
+		ST_Split(ST_SetSrid(b.the_geom,2154), ST_SetSrid(m.geom,2154)) as new_geom
+FROM mediatrices as m, buildings_bis as b
+WHERE ST_Touches(ST_SetSrid(b.the_geom,2154), ST_SetSrid(m.geom,2154)) = true
+	AND b.id = 1;
 
+CREATE TABLE one_building AS (
+select *
+from buildings_bis
+	where id = 1
+)
 
+SELECT --b.*, m.*, 
+	ST_Srid(b.the_geom), ST_Srid(ST_SetSrid(m.geom,2154)),
+	ST_Split(ST_SetSrid(b.the_geom,2154), ST_SetSrid(m.geom,2154)) as new_geom,
+	ST_Touches(ST_SetSrid(m.geom,2154),ST_SetSrid(b.the_geom,2154)) as crosses
+FROM mediatrices_v2 as m, one_building as b
+WHERE b.id = 1;
+
+-- pr cut le polygone en 2
+WITH segments AS (
+select b.data, ST_Split(ST_SetSrid(b.the_geom,2154), ST_SetSrid(m.geom,2154)) as geom,
+		ST_Crosses(ST_SetSrid(b.the_geom,2154), ST_SetSrid(m.geom,2154)) as crosses,
+		ST_Srid(b.the_geom), ST_Srid(ST_SetSrid(m.geom,2154))
+from mediatrices as m, buildings_bis as b
+where ST_Crosses(ST_SetSrid(b.the_geom,2154), ST_SetSrid(m.geom,2154)) = true
+)
+
+SELECT s.division, ST_Area(s.division) as surface
+FROM (
+		SELECT ST_Subdivide(geom) as division
+		FROM segments
+	) as s
+ORDER BY surface DESC
+LIMIT 2;
+	
+-- exemple de st_split
+SELECT ST_Split(ST_SetSrid(circle, 2154), ST_SetSrid(line,2154)),
+		ST_Srid(circle)as srid_cercle, ST_Srid(line) as srid_line
+FROM (
+	SELECT ST_MakeLine(ST_MakePoint(10, 10),ST_MakePoint(190, 190)) As line,
+   			 ST_Buffer(ST_GeomFromText('POINT(100 90)'), 50) As circle
+) As foo;
+	

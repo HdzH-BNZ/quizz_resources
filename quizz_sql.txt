@@ -457,3 +457,18 @@ VALUES (new.pays);
  
 INSERT INTO table1 (pays)
 VALUES ('djibouti'); ==> ça marche !
+
+54) insérer des données géométriques ds une table via SQL
+
+REP:
+INSERT INTO mediatrices(nom, geom)
+VALUES ('hicham', 'LINESTRING(0 1, 2 1)'::geometry);
+
+55) définir une valeur par défaut pour une colonne précise
+
+REP:
+CREATE TABLE products (
+    product_no integer,
+    name text,
+    price numeric DEFAULT 9.99
+);

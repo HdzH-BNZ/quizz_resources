@@ -102,6 +102,7 @@ arrière ensuite)
 REP:
 - git log => to recup le last commit_id
 - git revert commit_id
+- leave le git revert en tapant ":wq"
 
 12) pr faire un git revert sur remote repo qu'on vient de cloner:
 /!\ ya plein de soucis de merge_conflits
