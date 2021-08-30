@@ -91,9 +91,15 @@ ORDER BY surface DESC
 LIMIT 1
 )
 
+SELECT row_number() over() as id, 
+	ST_Union(
+		ST_SetSrid(x.lost_poly, 2154), 
+		ST_SetSrid(b.division, 2154)
+	)
+FROM (
 SELECT row_number() over() as id, ST_SetSrid(ST_Makeline(
 			ST_SetSrid(ST_Makepoint(z.new_x, z.new_y), 2154)
-		), 2154)
+		), 2154) as lost_poly
 FROM (
 SELECT v.*,
 	CASE 
@@ -114,6 +120,7 @@ FROM (
 	) as u
 ) as v, big_half as b
 ) as z
+) as x, big_half as b
 
 --SELECT (ST_DumpPoints(t.division)).* FROM
 
