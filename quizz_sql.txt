@@ -427,6 +427,8 @@ LANGUAGE SQL;
 
 -- pr appeler la fonction:
 SELECT quick_select('algerie');
+-- pr suppr la fonction:
+DROP FUNCTION quick_select(i varchar);
 
 /!\ pr créer des fct + complexes fo passer en PL/pgsql if need par
 exemple des var à déclarer, des boucle for loop etc

@@ -178,6 +178,14 @@ Ensuite add le paramètre DEFAULT_PERMISSION_CLASSES ds le fichier
 settings.py (ds l'objet REST_FRAMEWORK) et indiquer le chemin du
 fichier safelist.py avec la notation pointée
 
+
+21) pr add une colonne dans 1 table de la DB et l'add ds l'API
+
+REP:
+ajouter la colonne puis ajouter un champ ds les models et les
+serializers => no need any new migrations !
+
+
 -------Le WORKFLOW de Django REST Framework-----------------
 
 Les permissions sont check at the very start of the view avant mm

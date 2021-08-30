@@ -112,3 +112,10 @@ REP:
 - sur la page du repo cloné, cliquer sur "commit" avc l'horloge
 - select un commit en cliquant sur l'onglet pile to recup son id
 - git revert -m 1 id_commit
+
+13) pr visualiser les diff entre nos actuelles modifs et le last
+commit
+
+REP:
+git diff chemin_menant_fichier_où_ya_modif
+=> les lignes où changement sont indiquées

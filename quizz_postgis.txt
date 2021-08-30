@@ -1,0 +1,14 @@
+			PostGIS
+
+1) pr éviter les "ERROR : operation on mixed srid geometries"
+
+REP:
+tjrs faire un ST_SetSrid(..., 2154) après une opération spatiale
+qui crée une nouvelle géométrie
+ex : ST_SetSrid(ST_Makeline(...), 2154)
+
+2) diff ST_Intersects et ST_Intersection 
+
+REP:
+ST_Intersects renvoie un boolean
+ST_Intersection renvoie une geometry
