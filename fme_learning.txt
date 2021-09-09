@@ -232,6 +232,15 @@ vides sinon ça fctionnera pas
   postgis soit déjà installé sur la DB sinon ça fail car il fait
   automatiquement un select_postgis_version())
 
+48bis) le SQL EXECUTOR
+penser à tjrs préciser le schema à use ds le DB connexion
+paramètre puis can use le * ds la query + éviter end by ";" +
+doit use les tables et colonnes dispo ds 
+l'onglet "database tables" à gauche et si je fais un "=" ds
+le WHERE en citant une valeur tirée d'un transformer
+précédent, alors je dois add des simples cotes entre le
+@Value_blabla
+
 49) le STRING PADDER
 
 50) le STRING FORMATTER
@@ -299,3 +308,13 @@ vides sinon ça fctionnera pas
   valeur par défaut
 
 2) pr créer un published parameter sur FME 2021:
+clic droit User Parameter dans canevas Navigator => choose
+"Manage User Parameter" => cliquer sur le "+" pour insérer
+un paramètre supplémentaire => choose un TYPE
+=> si on veut faire un menu déroulant en input du WBench,
+alors choisire "CHOICE" puis entrer soit à la main les
+différentes data à afficher dans le menu déroulant, soit 
+cliquer sur "import" pour importer une liste de données à
+select depuis une DB => il faudra dc ensuite préciser le
+nom du champ qu'on souhaite récup et ses data et tout va
+s'afficher tout seul
