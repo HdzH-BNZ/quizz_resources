@@ -295,7 +295,7 @@ précédent, alors je dois add des simples cotes entre le
 - il ouvrira direct autant de writers qu'il n'y a de readers dc
   si ya 2 readers (dc 2 tables) Postgres, yora 2 writers au mm nom
 - ds "Feature Operation" indiquer if UPDATE, INSERT or DELETE puis
-  select la colonne cible dans "Match Columns"
+  select la clé primaire dans "Match Columns" !!!!!!! (dc id)
 
 			Les PUBLISHED PARAMETERS
 
