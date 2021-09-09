@@ -2,6 +2,14 @@
 
 format .FMW = fichier workspace used ds FME Workbench
 
+			Les TOOLS
+
+1) créer une connexion à une DB
+- onglet Tools > FME Options > Database Connexions
+
+2) créer une connexion à FME Server
+- onglet Tools > FME Options > Network Proxy
+
 			  Les READERS
 
 - qd on a plus READERS avc geodata en entrée, can les surligner
@@ -53,7 +61,7 @@ vides sinon ça fctionnera pas
 
 
 2) l'ATTRIBUTE CREATOR
-- plus rapide que le ATTRIBUTE MANAGER et permet de créer 1 champ
+- plus rapide que le ATTRIBUTE MANAGER pr créer 1 champ
 
 3) le REPROJECTOR
 - fo svnt changer couleur/img d'une des layers au moins
@@ -91,7 +99,7 @@ vides sinon ça fctionnera pas
   faire du routing comme Dijkstra ou ShortestPathFinder
 
 9) le DISSOLVER
-- pr dissolve un layer 
+- pr dissolve un layer => équivalent du ST_Union() de PostGIS
 
 10) l'ATTRIBUTE SPLITTER
 - pr rename des champs ou values en insérant un delimiter ou autre
@@ -113,7 +121,9 @@ vides sinon ça fctionnera pas
 - très svnt suivi d'1 FEATURE READER
 
 14) le TESTER
-- 
+- très utile pour filtrer des données qui vérifient un test => ds
+  ce cas on enchaîne souvent avec un ATTRIBUTEMANAGER
+- très utile pour créer un published parameter
 
 15) le TESTER_FAILED
 - 
@@ -234,6 +244,27 @@ vides sinon ça fctionnera pas
 51) le STRING CASE CHANGER
 - pour passer des values du LOWERCASE au UPPERCASE et inversement 
 
+52) le GEOMETRY COERCER
+- équivalent du ST_ExteriorRing() de PostGIS pr récup only le
+  contour d'un polygone => fo select le type "fme_line" dans
+  "geometry type output"
+
+53) le CHOPPER
+- permet de dé-segmenter une ligne en autant de segments qu'elle
+  n'a de côtés
+
+54) le SNIPPER
+- permet de cibler des points sur des lignes/polygones
+- permet de find le centroide d'1 segment if "snipping mode" est à
+  "distance (percentage)" et starting/ending location à 50
+
+55) le OFFSETCURVEGENERATOR
+- équivalent du ST_OffSetCurve() de PostGIS => permet de tracer
+  des parallèles à des segments à une distance d précisée en 
+  paramètre du transforme
+- c'est uniquement les data-output "right" qui sont intéressantes
+  when on a un polygone
+
 			  Les WRITERS
 1) KML
 - une fois l'emplacement/filename found, puis ds Feature Type 
@@ -250,3 +281,21 @@ vides sinon ça fctionnera pas
 
 4) le CSV
 - tjrs bien d'écrire les erreurs ds un CSV
+
+5) le POSTGRES
+- il ouvrira direct autant de writers qu'il n'y a de readers dc
+  si ya 2 readers (dc 2 tables) Postgres, yora 2 writers au mm nom
+- ds "Feature Operation" indiquer if UPDATE, INSERT or DELETE puis
+  select la colonne cible dans "Match Columns"
+
+			Les PUBLISHED PARAMETERS
+
+1) pr créer un published parameter:
+- call le transformer TESTER
+- clic rouage => select 1 champ ds "left value" puis un opérateur
+  ds "operator" et enfin ds "right value" => "user parameter" puis
+  "create user parameter" 
+- give same name ds "identifier" et "prompt" puis donner une
+  valeur par défaut
+
+2) pr créer un published parameter sur FME 2021:

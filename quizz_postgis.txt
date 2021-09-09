@@ -12,3 +12,29 @@ ex : ST_SetSrid(ST_Makeline(...), 2154)
 REP:
 ST_Intersects renvoie un boolean
 ST_Intersection renvoie une geometry
+
+3) pr tracer la médiatrice d'un segment
+
+REP:
+- ST_Centroid(segment) => get milieu du segment
+- ST_OffSetCurve(segment, distance) => get 1 parallèle au segment
+				      à une distance d du segment
+- ST_Centroid(du ST_OffSetCurve's resultat) => attention car
+  ST_OffSetCurve n'indique pas s'il crée la parrallèle à gauche, à
+  droite, en haut ou en bas du segment !!!
+
+sinon faire un ST_Envelope() et find les centroides des côtés du
+new poly rectangulaire tracé
+
+4) combien de vertices possède un quadrilatère ?
+
+REP:
+5 => car fo compter 2 fois le 1er point qui est à la fois le
+     StartPoint et le EndPoint
+
+5) sur quel point d'un polygone ST_BoundingDiagonal() begins ?
+
+REP:
+le premier point du polygone soit en bas à gauche
+en fait, ST_BoundingDiagonal() crée un rectangle qui circonscrit
+le polygone

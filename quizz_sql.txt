@@ -1,4 +1,4 @@
-Mon Quizz PostgreSQL :
+			Mon Quizz PostgreSQL :
 
 1) afficher la version used de PG :
 
@@ -474,3 +474,12 @@ CREATE TABLE products (
     name text,
     price numeric DEFAULT 9.99
 );
+
+56) pr mettre à jour la valeur par défaut d'une colonne et mettre
+à false les valeurs déjà entrées:
+
+REP:
+ALTER TABLE i.voiture
+ALTER COLUMN cabriolet SET DEFAULT False;
+UPDATE i.voiture
+SET cabriolet = false;

@@ -23,12 +23,14 @@ select le polygon avc la plus grande surface et le superposer
 symetriquement au polygon à la moins grande surface
 
 
---DROP VIEW IF EXISTS v_half_manquante;
---CREATE OR REPLACE VIEW v_half_manquante AS
+--DROP VIEW IF EXISTS v_final_symm_3;
+--CREATE OR REPLACE VIEW v_final_symm_3 AS
 WITH big_half AS (
 --pr ne filtrer que la moitié à la superficie la plus grande du polygone
 WITH poly_cut AS (
 --pr tracer la médiatrice du segment le plus long du polygone
+--DROP VIEW IF EXISTS v_mediatrice_poly_6_tools;
+--CREATE OR REPLACE VIEW v_mediatrice_poly_6_tools AS
 WITH mediatrices_origins AS (
 --pr déconstruire le polygone
 WITH segments AS (
@@ -59,7 +61,7 @@ SELECT *,
 		ST_MakeLine(
 			--ST_Centroid(geom),
 			ST_Point(ST_X(ST_Centroid(geom)),ST_Y(ST_Centroid(geom))),
-			ST_Centroid(ST_OffsetCurve(ST_GeomFromText(geom), 100, 'quad_segs=4 join=round'))
+			ST_Centroid(ST_OffsetCurve(ST_GeomFromText(geom), 100))
 			) as new_mediatrice,
 		ST_Length(
 			ST_GeomFromText(geom)
@@ -70,13 +72,49 @@ WHERE geom IS NOT NULL
 ORDER BY longueur DESC
 LIMIT 1
 )
-
+	
 SELECT b.data, 
 	ST_Split(b.the_geom,m.new_mediatrice) as splitted_poly,
-	ST_Intersection(b.the_geom, m.new_mediatrice) as ma_mediatrice
-	--ST_Crosses(b.the_geom, m.new_mediatrice) as crosses, b.the_geom
-FROM mediatrices_origins as m, buildings_bis as b
-WHERE ST_Crosses(b.the_geom, m.new_mediatrice) = True AND b.id = 3
+	--ST_Intersection(b.the_geom, m.new_mediatrice) as ma_mediatrice,
+	--ST_Intersects(b.the_geom, m.new_mediatrice),
+	ST_Intersection(b.the_geom, h.the_real_mediatrice) as ma_mediatrice,
+	ST_Intersects(b.the_geom, h.the_real_mediatrice),
+	ST_Crosses(b.the_geom, h.the_real_mediatrice) as crosses, 
+	b.the_geom,
+	m.new_mediatrice,
+	h.the_real_mediatrice
+FROM mediatrices_origins as m, buildings_bis as b,
+	(
+				SELECT ST_MakeLine(
+				ST_MakePoint(
+					ST_X(ST_EndPoint(m.new_mediatrice)),
+					ST_Y(ST_EndPoint(m.new_mediatrice))
+				),
+				ST_MakePoint(w.new_x_endpoint, w.new_y_endpoint)
+				) as the_real_mediatrice
+			FROM (
+			SELECT 
+				CASE 
+					WHEN v.x_endpoint < v.x_symmetry_center THEN ABS(v.x_symmetry_center + (v.x_symmetry_center - v.x_endpoint))
+					WHEN v.x_endpoint > v.x_symmetry_center THEN ABS(v.x_symmetry_center - (v.x_endpoint - v.x_symmetry_center))
+					WHEN v.x_endpoint = v.x_symmetry_center THEN v.x_endpoint
+				END new_x_endpoint,
+				CASE
+					WHEN v.y_endpoint < v.y_symmetry_center THEN ABS(v.y_symmetry_center + (v.y_symmetry_center - v.y_endpoint))
+					WHEN v.y_endpoint > v.y_symmetry_center THEN ABS(v.y_symmetry_center - (v.y_endpoint - v.y_symmetry_center))
+					WHEN v.y_endpoint = v.y_symmetry_center THEN v.y_endpoint
+				END new_y_endpoint
+			FROM (
+				SELECT ST_X(ST_EndPoint(m.new_mediatrice)) as x_endpoint,
+						ST_Y(ST_EndPoint(m.new_mediatrice)) as y_endpoint,
+						ST_X(ST_Centroid(m.geom)) as x_symmetry_center,
+						ST_Y(ST_Centroid(m.geom)) as y_symmetry_center
+				FROM mediatrices_origins as m
+			) as v
+			) as w, mediatrices_origins as m
+	) as h
+WHERE --ST_Crosses(b.the_geom, m.new_mediatrice) = True AND 
+	b.id = 3
 )
 
 SELECT row_number() over(), s.division, ST_Area(s.division) as surface, s.ma_mediatrice,
@@ -91,15 +129,15 @@ ORDER BY surface DESC
 LIMIT 1
 )
 
-SELECT row_number() over() as id, 
+SELECT row_number() over() as id,
 	ST_Union(
 		ST_SetSrid(x.lost_poly, 2154), 
 		ST_SetSrid(b.division, 2154)
 	)
 FROM (
-SELECT row_number() over() as id, ST_SetSrid(ST_Makeline(
+SELECT row_number() over() as id, ST_SetSrid(ST_MakePolygon(ST_Makeline(
 			ST_SetSrid(ST_Makepoint(z.new_x, z.new_y), 2154)
-		), 2154) as lost_poly
+		)), 2154) as lost_poly
 FROM (
 SELECT v.*,
 	CASE 
@@ -121,7 +159,6 @@ FROM (
 ) as v, big_half as b
 ) as z
 ) as x, big_half as b
-
 --SELECT (ST_DumpPoints(t.division)).* FROM
 
 /*
@@ -159,3 +196,28 @@ FROM (
 ORDER BY surface DESC
 LIMIT 1;
 */
+
+CREATE OR REPLACE VIEW v_all_diagonals AS
+select id, ST_BoundingDiagonal(the_geom) as geom
+from buildings_bis
+
+select id, ST_PointN(ST_ExteriorRing(the_geom), 3)
+from buildings_bis
+
+-- création de l'enveloppe = rectangle circonscrit au polygone
+DROP VIEW v_envelope;
+CREATE OR REPLACE VIEW v_envelope AS
+select id, ST_Envelope(the_geom)
+from buildings_bis;
+
+SELECT row_number() over()::int as id, ST_Union(o.the_geom, n.geom) as geom
+FROM buildings_bis as o, (
+select row_number() over()::int as id, ST_NPoints(m.geom) as surface, geom
+FROM (
+		select row_number() over()::int as id, 
+				ST_Subdivide(ST_Difference(ST_Envelope(the_geom), the_geom)) as geom
+		from buildings_bis
+		where id = 5) as m
+ORDER BY surface DESC
+LIMIT 1) as n
+where o.id = 5;
