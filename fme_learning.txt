@@ -8,7 +8,22 @@ format .FMW = fichier workspace used ds FME Workbench
 - onglet Tools > FME Options > Database Connexions
 
 2) créer une connexion à FME Server
-- onglet Tools > FME Options > Network Proxy
+- onglet Tools > FME Options > Network Proxy (selon la DOC)
+SINON
+- onglet Tools > FME Options > Web Connections => cliquer
+  sur le "+" to add 1 connexion puis ds "Web Service" choose:
+  "FME Server" et entrer:
+  1) l'url du serveur /!\ http ou https
+  2) le username
+  3) le mdp
+  puis dans "File" select "Publish" (ya aussi une icône
+  dédiée dans la toolbar) et choose la bonne connexion puis
+  "Next" => choose le bon repository et give a name au
+  workspace (on peut aussi voir la liste des workspaces déjà
+  dispo ds le dispo) => ensuite ne pas toucher à
+  "connections" sinon il récup les param connexion de l'env
+  de dev pour les copier en prod => puis dans les "register
+  services" ne cocher que "Job Submitter" => PUBLISH !!!
 
 			  Les READERS
 
