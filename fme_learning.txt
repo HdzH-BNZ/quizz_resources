@@ -150,7 +150,10 @@ vides sinon ça fctionnera pas
 -
 
 18) le ATTRIBUTE ROUNDER
-- 
+- il va arrondir les valeurs d'un attribut numérique
+- fo préciser le nombre de décimal où arrondir
+- can préciser si on arrondit à la valeur la plus proche ou
+  si on prend systématiquement la valeur supér ou infér
 
 19) l'EXPRESSION EVALUATOR
 - 
@@ -211,12 +214,17 @@ vides sinon ça fctionnera pas
 
 32) le BULK ATTRIBUTE RENAMER
 - pr rename des attributs using REGEX
+- to add only prefix/suffix sur des attributs
 
 33) le FEATURE MERGER
+- permet de fusionner 2 tables via l'équivalent d'1 GROUP BY
 
 34) le BOUNDING BOX REPLACER
 
 35) le CENTER LINE REPLACER
+- créer une droite au milieu de la géométrie
+- 2 à 3 modes possibles : medialAxis/straightSkeleton ou
+  ApproximateCenterLine
 
 36) le ATTRIBUTE ROUNDER
 
@@ -225,16 +233,27 @@ vides sinon ça fctionnera pas
 38) le CENTER POINT EXTRACTOR
 
 39) le GEOMETRY EXTRACTOR
+- récup la géométrie de chaque feature
+- préciser if on veut remove la geometrie de la table qu'on
+  va extraire
 
 40) le SPATIAL RELATOR
+- permet 1 jointure spatiale entre plusieurs features et
+  selon le geotraitement voulu (intersection, touches,
+  within, contains, equals)
 
 41) le PYTHON CALLER
+- permet d'écrire un script python à l'intérieur du
+  transformer en appelant les attributs à l'intérieur du
+  code python
 
 42) le OFFSETTER
 
 43) le LIST SUMMER
 
 44) le CLONER
+- il crée des copies en créant un new attribute qui stocke
+  un Copy Number Attribute
 
 45) le MODULO COUNTER
 
@@ -288,6 +307,35 @@ précédent, alors je dois add des simples cotes entre le
   paramètre du transforme
 - c'est uniquement les data-output "right" qui sont intéressantes
   when on a un polygone
+
+56) le VARIABLE RETRIEVER
+- permet add un new attribut à la table en précisant les
+  valeurs possibles
+- souvent précédé d'un arttributeCreator
+
+57) le HORIZONTAL ANGLE CALCULATOR
+- provient de FME HUB et remplace le AZIMUTH CALCULATOR
+  désormais obsolète
+- calcule l'angle et l'azimuth of any input line/polyline
+- azimuth = angle between the line et the north vector
+- souvent suivi d'un attributeRounder pour arrondir les 
+  valeurs de l'azimuth
+- associé au centerLineReplacer il permet de calculer un
+  indice de rotation
+
+58) le CIRCULARITY CALCULATOR
+- calcule un indice de circularité d'une géométrie en créant
+  un new attribut qui stockera l'indice créé
+
+59) le SUBSTRING EXTRACTOR
+- extrait une substring d'un champ attributaire MS fo 
+  préciser des index pour savoir à quelle position de la
+  string la couper
+
+60) le AFFINER
+- permet de faire pivoter une géométrie en fonction d'un
+  sinus/cosinus
+
 
 			  Les WRITERS
 1) KML
