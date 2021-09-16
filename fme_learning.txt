@@ -74,6 +74,13 @@ vides sinon ça fctionnera pas
 - ds colonne ACTION can also rename 1 colonne to keep l'output
   attribute name given
 
+1b) le ATTRIBUTE FILTER
+- alternative + performante à l'attributeManager
+- select l'attribut à filtrer puis cliquer sur "import" et
+  bring les différentes values possibles de cet attribut en
+  se connectant à la DB via et en précisant le schema, la
+  table et l'attribut qu'on recherche
+
 
 2) l'ATTRIBUTE CREATOR
 - plus rapide que le ATTRIBUTE MANAGER pr créer 1 champ
@@ -163,7 +170,7 @@ vides sinon ça fctionnera pas
 
 21) le SAMPLER
 - to select un échantillon N de data selon des sampling types 
-  différents
+  différents (en général tjrs select le "First N Features")
 
 22) le GOEID Generator
 - il calcule un Geographic Object IDentifier for each feature et
@@ -211,6 +218,10 @@ vides sinon ça fctionnera pas
 30) le DUPLICATE FILTER
 
 31) le CENTER POINT REPLACER
+- remplace la géométrie par un point selon 3 modes != :
+  1) center point of bounding box
+  2) center of gravity
+  3) any inside point
 
 32) le BULK ATTRIBUTE RENAMER
 - pr rename des attributs using REGEX
@@ -241,6 +252,9 @@ vides sinon ça fctionnera pas
 - permet 1 jointure spatiale entre plusieurs features et
   selon le geotraitement voulu (intersection, touches,
   within, contains, equals)
+- put YES à "Calcultate Cardinality of Intesections" pour
+  resortir le nombre de cas qui valide notre jointure
+  spatiale
 
 41) le PYTHON CALLER
 - permet d'écrire un script python à l'intérieur du
@@ -335,6 +349,17 @@ précédent, alors je dois add des simples cotes entre le
 60) le AFFINER
 - permet de faire pivoter une géométrie en fonction d'un
   sinus/cosinus
+
+61) le LINE EXTENDER
+- pour prolonger une ligne en précisant la longueur
+- segments to average : par défaut à 1 (ça dépend du nombre
+  de segments de la ligne)
+
+62) le ROTATOR
+- pour faire pivoter une géométrie autour d'un point (fo dc
+  tjrs lui passer les coordonnées X et Y du point)
+- préciser le nombre de degrés pour pivoter
+- très used pour faire de la symétrie/miroitement
 
 
 			  Les WRITERS
