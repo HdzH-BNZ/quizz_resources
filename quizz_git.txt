@@ -119,3 +119,9 @@ commit
 REP:
 git diff chemin_menant_fichier_où_ya_modif
 => les lignes où changement sont indiquées
+
+14) pr forcer le switch de branche mm si on a pas add/commit
+sur la branche actuelle
+
+REP:
+git stash

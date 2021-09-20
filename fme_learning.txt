@@ -1,6 +1,8 @@
 			     FME 
 
-format .FMW = fichier workspace used ds FME Workbench
+- format .FMW = fichier workspace used ds FME Workbench
+- pr 1 projet FME : ne jamais send le fichier .recover qd on
+		    veut partager un projet (par mail par ex)
 
 			Les TOOLS
 
@@ -151,7 +153,7 @@ vides sinon ça fctionnera pas
 - 
 
 16) le AREA CALCULATOR
-- 
+- pour calculer l'aire d'un polygone
 
 17) le STATISTIC CALCULATOR
 -

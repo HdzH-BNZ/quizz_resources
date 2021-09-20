@@ -1,5 +1,8 @@
 			Mon Quizz PostgreSQL :
 
+- prblm de postgresql : can't paralléliser les tâches car tt
+  doit tourner en boucle sur 1 seul CPU
+
 1) afficher la version used de PG :
 
 REP :
@@ -483,3 +486,8 @@ ALTER TABLE i.voiture
 ALTER COLUMN cabriolet SET DEFAULT False;
 UPDATE i.voiture
 SET cabriolet = false;
+
+57) pr compter le nombre d'éléments d'1 array
+
+REP:
+SELECT cardinality(array1) FROM example;
