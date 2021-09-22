@@ -351,6 +351,8 @@ précédent, alors je dois add des simples cotes entre le
 60) le AFFINER
 - permet de faire pivoter une géométrie en fonction d'un
   sinus/cosinus
+- fo bien connaître les 6 lettres MS en général on modifie
+  que les valeurs de A, B, D et E (ex A=-1, B=0, D=0, E=1)
 
 61) le LINE EXTENDER
 - pour prolonger une ligne en précisant la longueur
