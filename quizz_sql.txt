@@ -491,3 +491,9 @@ SET cabriolet = false;
 
 REP:
 SELECT cardinality(array1) FROM example;
+
+58) pr écrire une apostrophe ds une string
+
+REP:
+E'mettre l\'apostrophe dans une string' => on échappe
+l'apostrophe et on place un E avant la string
