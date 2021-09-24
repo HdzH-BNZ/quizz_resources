@@ -9,8 +9,10 @@ pr créer une bonne API Django:
 1) créer nos class de modèles depuis les tables d'1 DB PG ?
 
 REP : python manage.py inspectdb > models.py
-
-
+- /!\ cette commande n'est qu'1 base à compléter ensuite car
+      dès que ya des clés étrangères ça bloque
+- /!\ if un column type de la DB n'est pas reconnue par DRF
+      il est remplacé par TextField()
 si on génère des urls basiques sans regex ds le app/urls.py, 
 automatiquement leurs routes tiendront compte des primary key ID
 
@@ -184,6 +186,12 @@ fichier safelist.py avec la notation pointée
 REP:
 ajouter la colonne puis ajouter un champ ds les models et les
 serializers => no need any new migrations !
+
+22) pr lister les migrations à faire
+
+REP:
+python manage.py showmigrations --list
+
 
 
 -------Le WORKFLOW de Django REST Framework-----------------
