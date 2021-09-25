@@ -47,6 +47,37 @@ sinon il affiche par la valeur ds la page du navigateur
 + possible qu'il faille define des lookup fields ds le serializer
   file sinon mettre direct fields='__all__' mm si pas recommandé
 
+dans models.py:
+- when ForeignKeyField ds 1 table A => tjrs préciser le 
+  nom du modèle lié et surtout pas le mettre entre simple/double quotes
+  et évidemment pr que ça marche fo que ce modèle soit déclaré
+  avant !
+  , le 
+  "models.DO_NOTHING, le db_column=champ_table1
+  puis le to_field (donc le champ relié)
+  très important de pas oublier le "to_field = champ_tableB" 
+  sinon il prend la clé primaire "id" du modèle
+
+dans serializers.py:
+- ensuite fo surtout pas mettre de PrimaryKeyRelatedFied() sinon
+  il prendra la clé primaire (liée à ce que j'ai écrit au-dessus)
+- fo juste mettre un IntegerField ou CharField classique mais
+  préciser la source en attribut 
+  ex : IntegerField(source='champ_tableA.champ_tableB')
+- quand on veut aller chercher une valeur de la tableA vers une
+  tableC en passant par une table B, fo mentionner 3 champs:
+  source=champ_tableA.champ_tableB.champ_tableC
+- pr un UPDATE/PATCH => la doc technique affirme qu'on est
+  obligés de passer par un PrimaryKeyRelatedField si on veut
+  update un champ de foreign key, ne mettre que le nom du champ
+  du modèle dans l'attribut source
+
+dans le views.py:
+- pr s'assurer que le serializer est valide, faire un :
+  print(serializer.is_valid()) => renvoie un boolean
+- pr visualiser les data validées par Django ds le serializer, can
+  faire un print(serializer.validated_data)
+- if fear ya error, can faire un print(serializer.errors)
 
 6) l'OBJECTS des models :
 - use objects.filter() to SELECT un champ en fct d'1 WHERE
