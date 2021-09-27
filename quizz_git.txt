@@ -18,6 +18,11 @@ git push -u remote new_branch
 REP :
 git checkout branche2
 
+2b) pr changer de branche dispo en remote MS absente en local :
+
+REP:
+git checkout branche_remote
+
 3) créer une branche "develop" en local puis en remote à partir
 de la branche master
 
@@ -125,3 +130,8 @@ sur la branche actuelle
 
 REP:
 git stash
+
+15) pr check le repo distant
+
+REP:
+git remote -v
