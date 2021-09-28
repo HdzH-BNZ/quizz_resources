@@ -3,6 +3,10 @@
 - format .FMW = fichier workspace used ds FME Workbench
 - pr 1 projet FME : ne jamais send le fichier .recover qd on
 		    veut partager un projet (par mail par ex)
+		    ni le .log
+- format .TDE = format natif du logiciel Tableau et ds lequel
+                FME peut écrire et générer des geodashboards
+		dans Tableau
 
 			Les TOOLS
 
