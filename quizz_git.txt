@@ -135,3 +135,8 @@ git stash
 
 REP:
 git remote -v
+
+16) pr rename une branche
+
+REP:
+git branch -m former_name new_name
