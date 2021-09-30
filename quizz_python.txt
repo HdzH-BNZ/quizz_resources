@@ -9,7 +9,8 @@ os.getenv('NOM_VAR_DENVIRONNEMENT')
 
 2) pr faire un request.patch en test :
 
-REP : préciser en attribut json = l'objet à passer dans le patch
+REP : préciser en attribut "json = l'objet à passer dans le 
+      patch"
 
 
 3) pour tester les endpoints d'une API:
@@ -24,6 +25,11 @@ ex : response = requests.get(
 ensuite on fait des "assert" pour vérifier
 ex : assert response.status_code == 200
      et si le assert est pas bon, we get 1 AssertionError
+
+on peut aussi préciser un message d'erreur if le Assert est
+pas vérifié
+ex : assert lenCommuneDB == lenCommuneAPI, "Erreur, veuillez
+     relancer le test"
 
 4) pr use la libraire JSON et print un pure JSON
 
@@ -53,6 +59,13 @@ myQuery.to_json(orient='index')
 et si on veut compter le nombre d'items dans le JSON :
 len(myQuery.to_json(orient='index'))
 
+can associer conditions avec les asserts grâce au
+try...
+except...
+
+penser à add un max de print pour guider le user des tests
+et le sys.exit() si il faut interrompre le test
+
 6) comment quitter un virtual environment
 
 REP:
@@ -62,3 +75,10 @@ entrer "deactivate"
 
 REP:
 myVariable = input()
+
+8) to hide the tracebacks error response ds la console
+
+REP:
+import sys
+sys.tracebacklimit=0
+/!\ MS ds ce cas pensez à tjrs add ses own error messages
