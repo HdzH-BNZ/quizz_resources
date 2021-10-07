@@ -497,3 +497,9 @@ SELECT cardinality(array1) FROM example;
 REP:
 E'mettre l\'apostrophe dans une string' => on échappe
 l'apostrophe et on place un E avant la string
+
+59) pr select all values d'une même colonne
+
+REP:
+SELECT DISTINCT colonneA
+FROM tableA
