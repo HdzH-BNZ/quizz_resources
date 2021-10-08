@@ -503,3 +503,9 @@ l'apostrophe et on place un E avant la string
 REP:
 SELECT DISTINCT colonneA
 FROM tableA
+
+60) sur PgAdmin, exporter les résultats d'une requête
+
+REP:
+après la requête, cliquer sur le bouton "save results to
+file" en haut à droite (ya une flèche verse le bas)
