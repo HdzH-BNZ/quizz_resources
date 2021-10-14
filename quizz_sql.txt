@@ -185,6 +185,10 @@ REP :
 UPDATE salaires
 SET champ1 = ROUND(random()::numeric, 2), champ2 = random();
 
+Attention au type => if on fait un ROUND() sur un double-
+precision, ça marchera que si on précise pas le nombre de
+décimales après la virgule. Si on veut absolument le
+préciser, fo convertir le double-precision en numeric
 
 26) pour réinitialiser une séquence
 
@@ -414,7 +418,9 @@ START 100;
 49) qd utilise-t-on nextval() ?
 
 REP:
-pr manipuler des séquences
+pr manipuler des séquences par ex si on veut select le next
+id d'une séquence on fait:
+SELECT nextval('schemaA."table1_id_seq"');
 
 50) créer une fonction simple en SQL
 
@@ -509,3 +515,8 @@ FROM tableA
 REP:
 après la requête, cliquer sur le bouton "save results to
 file" en haut à droite (ya une flèche verse le bas)
+
+61) sur PGSQL pr requêter une table qui contient une MAJ
+
+REP:
+FROM mon_schema."MaTable" => bien mettre double cotes

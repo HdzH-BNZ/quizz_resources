@@ -31,6 +31,17 @@ pas vérifié
 ex : assert lenCommuneDB == lenCommuneAPI, "Erreur, veuillez
      relancer le test"
 
+3bis) pr faire un PATCH avec requests
+
+REP:
+fo préciser un URL + un HEADERS + un JSON et non un DATA car
+les data qu'on envoie doivent être au format JSON
+ex: requests.patch(
+	host + port + url,
+	headers={'Authorization':jeton, 'Host':'localhost', 
+		 'Content-Type':'application/json'},
+	json=mon_payload)
+
 4) pr use la libraire JSON et print un pure JSON
 
 REP:
