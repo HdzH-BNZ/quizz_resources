@@ -8,6 +8,10 @@
                 FME peut écrire et générer des geodashboards
 		dans Tableau
 
+conseils de Mohannad:
+- Dans FME on n'utilise pas multiples geometries dans le meme 
+ objet
+
 			Les TOOLS
 
 1) créer une connexion à une DB
@@ -56,11 +60,13 @@ SINON
                           Les TRANSFORMERS
 
 1) l'ATTRIBUTE MANAGER
-can créer de new attributs ds la table attributaire ou en suppr :
-- ds colonne OUTPUT ATTRIBUTE add new champ et ds ATTRIBUTE VALUE
-  créer une new value ds le TEXT EDITOR (là on peut vraiment
-  écrire du texte entre les valeurs) ou l'ARITHMETIC EDITOR (là on
-  peut add des opérateurs arithmétiques)
+can créer de new attributs ds la table attributaire ou en 
+suppr :
+- ds colonne OUTPUT ATTRIBUTE add new champ et ds ATTRIBUTE 
+  VALUE créer une new value ds le TEXT EDITOR (là on peut 
+  vraiment écrire du texte entre les valeurs) ou 
+  l'ARITHMETIC EDITOR (là on peut add des opérateurs 
+  arithmétiques)
 - cliquer sur le rouage de l'AttributeManager et ds colonne ACTION
   sélectionner l'option REMOVE
 
@@ -135,7 +141,8 @@ vides sinon ça fctionnera pas
   PascalCase ou d'un snake_case
 
 11) le FEATURE JOINER
-- pr faire des LEFT/RIGHT JOIN entre layers
+- pr faire des LEFT/RIGHT JOIN entre layers MS fo savoir dès
+  le début lequel sera LEFT et lequel sera RIGHT
 
 12) le ATTRIBUTE VALUE MAPPER
 - pr comparer des valeurs attributaires d'1 table à 1 LookUpTable
@@ -222,6 +229,8 @@ vides sinon ça fctionnera pas
 - permet de chaîner toutes les values d'1 mm attribut
 
 30) le DUPLICATE FILTER
+- pr éliminer les doublons (très used après un Tester)
+- très used en fin de chaîne avant de lancer un writer
 
 31) le CENTER POINT REPLACER
 - remplace la géométrie par un point selon 3 modes != :
@@ -369,6 +378,15 @@ précédent, alors je dois add des simples cotes entre le
 - préciser le nombre de degrés pour pivoter
 - très used pour faire de la symétrie/miroitement
 
+63) le ATTRIBUTE KEEPER
+- removes all attributes sauf ceux sélectionnés
+
+64) le JUNCTION
+- très used pour join many tables as jointure SQL ou un
+  SELECT UNION
+
+65) le CRCCALCULATOR
+- pr créer un new ID unique à sa table
 
 			  Les WRITERS
 1) KML
@@ -381,8 +399,14 @@ précédent, alors je dois add des simples cotes entre le
 - can sortir des tableaux/graphes/map au format HTML MS faut le 
   précéder d'1 HTMLReportGenerator
 
-3) le FEATURE WRITER
-- permet de créer 1 SHP à partir n'importe quel format geodata
+3) le FEATURE WRITER (by selecting ADD WRITER button)
+- use it pr écrire ds une table déjà existante ds la DB
+  -- ds "table definition" fo select "import from Dataset"
+     => then cliquer sur OK
+  -- puis préciser le schema et la table ciblée
+  -- pr field "table handling" laisser "create if needed"
+- permet de créer 1 SHP à partir n'importe quel format 
+  geodata
 
 4) le CSV
 - tjrs bien d'écrire les erreurs ds un CSV
