@@ -69,6 +69,10 @@ suppr :
   arithmétiques)
 - cliquer sur le rouage de l'AttributeManager et ds colonne ACTION
   sélectionner l'option REMOVE
+- attention ! si on entre une formule mathématique, bien
+  utiliser le arithmetic editor sinon il le prendra comme
+  une châine de caractère => moyen de vérifier : ds le 
+  tableau la formule s'affiche avec un @Evaluate(...)
 
 si dans le WRITER les data added se manifestent pas, go ds rouage
 du WRITER puis ds l'onglet USER ATTRIBUTES switcher de Manuel vers
@@ -96,6 +100,10 @@ vides sinon ça fctionnera pas
 
 2) l'ATTRIBUTE CREATOR
 - plus rapide que le ATTRIBUTE MANAGER pr créer 1 champ
+- à tjrs utiliser après un SPATIALRELATOR pr toujours 
+  préciser les champs qu'on veut conserver suite à la 
+  jointure spatiale (dc ds le SPATIALRELATOR indiquer ces
+  champs dans la liste des fields à add tt en bas)
 
 3) le REPROJECTOR
 - fo svnt changer couleur/img d'une des layers au moins
@@ -406,7 +414,8 @@ précédent, alors je dois add des simples cotes entre le
   -- puis préciser le schema et la table ciblée
   -- pr field "table handling" laisser "create if needed"
 - permet de créer 1 SHP à partir n'importe quel format 
-  geodata
+  geodata mais fo choose "automatic" et pas "copy from 
+  dataset"
 
 4) le CSV
 - tjrs bien d'écrire les erreurs ds un CSV

@@ -38,3 +38,8 @@ REP:
 le premier point du polygone soit en bas à gauche
 en fait, ST_BoundingDiagonal() crée un rectangle qui circonscrit
 le polygone
+
+6) pr éliminer les géométries invalides d'une table
+
+REP:
+ST_IsValid(geom)
