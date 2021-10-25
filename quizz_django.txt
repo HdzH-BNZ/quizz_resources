@@ -223,6 +223,16 @@ serializers => no need any new migrations !
 REP:
 python manage.py showmigrations --list
 
+23) pr utiliser une date timestamp
+
+REP:
+dans models.py use un DateTimeField()
++ idem ds serializers.py et add les param suivants:
+	- source
+	- default_timezone (None if ds PGSQL without TZ)
+	- allow_null si on veut laisser le client MAJ
+	  la date à une valeur nulle
+
 
 
 -------Le WORKFLOW de Django REST Framework-----------------

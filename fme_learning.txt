@@ -167,6 +167,9 @@ vides sinon ça fctionnera pas
 - très utile pour filtrer des données qui vérifient un test => ds
   ce cas on enchaîne souvent avec un ATTRIBUTEMANAGER
 - très utile pour créer un published parameter
+- attention quand on liste les valeurs possibles avec IN il
+  faut juste séparer les valeurs par une virgule, donc 
+  jamais d'espace
 
 15) le TESTER_FAILED
 - 
@@ -254,6 +257,11 @@ vides sinon ça fctionnera pas
 - permet de fusionner 2 tables via l'équivalent d'1 GROUP BY
 
 34) le BOUNDING BOX REPLACER
+- crée la BBox d'une géométrie MS par défaut les côtés
+  sont parallèles aux axes du repère orthonormé
+- select "2D Oriented Bounding" pour orienter les côtés de
+  la BBox pour qu'ils soient à peu près parallèles à ceux
+  de la géométrie originelle
 
 35) le CENTER LINE REPLACER
 - créer une droite au milieu de la géométrie
@@ -263,6 +271,12 @@ vides sinon ça fctionnera pas
 36) le ATTRIBUTE ROUNDER
 
 37) le CIRCULARITY CALCULATOR
+- pr calculer un indice de circularité d'une géométrie
+- si on se focus sur les contours ronds d'1 géométrie, fo
+  select "Feature Boundary"
+- svnt suivi d'un Tester sur le new field _circularity créé
+- identifier les potentiels cercles c'est aussi identifier
+  ce qui n'est pas circulaire dc les FAILED st intéressants
 
 38) le CENTER POINT EXTRACTOR
 
@@ -278,6 +292,11 @@ vides sinon ça fctionnera pas
 - put YES à "Calcultate Cardinality of Intesections" pour
   resortir le nombre de cas qui valide notre jointure
   spatiale
+- très used pr détecter if bug géométrie d'une couche (par
+  ex if géométries d'1 mm couche doivent pas se toucher,
+  on enchaîne le SpatialRelator avc un prédicat TOUCHES
+  suivi d'un Tester sur le related_supplier et on récup les
+  géométries bugs) => also called "TAUX DE RECOUVREMENT"
 
 41) le PYTHON CALLER
 - permet d'écrire un script python à l'intérieur du
@@ -353,12 +372,13 @@ précédent, alors je dois add des simples cotes entre le
 57) le HORIZONTAL ANGLE CALCULATOR
 - provient de FME HUB et remplace le AZIMUTH CALCULATOR
   désormais obsolète
-- calcule l'angle et l'azimuth of any input line/polyline
 - azimuth = angle between the line et the north vector
+- calcule l'angle et l'azimuth of any input line/polyline et
+  va dc créer ces 2 new fields + un X et Y
 - souvent suivi d'un attributeRounder pour arrondir les 
   valeurs de l'azimuth
-- associé au centerLineReplacer il permet de calculer un
-  indice de rotation
+- associé au centerLineReplacer puis au Rotator il permet de 
+  calculer un indice de rotation
 
 58) le CIRCULARITY CALCULATOR
 - calcule un indice de circularité d'une géométrie en créant
@@ -395,6 +415,10 @@ précédent, alors je dois add des simples cotes entre le
 
 65) le CRCCALCULATOR
 - pr créer un new ID unique à sa table
+
+66) le BOUNDS EXTRACTOR
+- pr récup les : Xmax Xmin Ymax Ymin et les stock ds la
+  table attributaire
 
 			  Les WRITERS
 1) KML

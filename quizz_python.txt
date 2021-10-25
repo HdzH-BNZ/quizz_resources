@@ -1,4 +1,4 @@
-QUIZZ PYTHON
+			QUIZZ PYTHON
 
 1) pr importer une variable d'environnement :
 
@@ -93,3 +93,16 @@ REP:
 import sys
 sys.tracebacklimit=0
 /!\ MS ds ce cas pensez à tjrs add ses own error messages
+
+9) to print la date actuelle
+
+REP:
+use librairie "datetime" déjà implémentée nativement dans
+les last versions de python, ex :
+from datetime import datetime
+print(datetime.today())
+- when monte une appli très important de réserver une 
+  colonne "date_user_modif" to save l'heure de la last modif
+  du client
+- can passer du format date au format timestamps (très used
+  ds PGSQL)
