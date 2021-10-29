@@ -7,6 +7,7 @@
 - format .TDE = format natif du logiciel Tableau et ds lequel
                 FME peut écrire et générer des geodashboards
 		dans Tableau
+- can combiner FME avec PowerBI
 
 conseils de Mohannad:
 - Dans FME on n'utilise pas multiples geometries dans le meme 
@@ -161,11 +162,14 @@ vides sinon ça fctionnera pas
 13) le CREATOR
 - crée des features using les paramètres fournis (MS en gros les
   param par déf st suffisants)
-- très svnt suivi d'1 FEATURE READER
+- très svnt suivi d'1 FEATURE READER ou PARAMETER FETCHER
 
 14) le TESTER
 - très utile pour filtrer des données qui vérifient un test => ds
   ce cas on enchaîne souvent avec un ATTRIBUTEMANAGER
+- attention, là on peut avoir qu'un seul output, donc si on
+  veut faire plusieurs TESTS avec if, elif, else faut use
+  le TEST FILTER !
 - très utile pour créer un published parameter
 - attention quand on liste les valeurs possibles avec IN il
   faut juste séparer les valeurs par une virgule, donc 
@@ -178,7 +182,10 @@ vides sinon ça fctionnera pas
 - pour calculer l'aire d'un polygone
 
 17) le STATISTIC CALCULATOR
--
+- permet de calculer des COUNT, SUM, MEAN, MEDIAN etc avec
+  des GROUP BY (équivalent des requêtes aggregation PGSQL)
+- les resultats st ds le SUMMARY du transformer
+- use un WRITER excel pour récup les stats
 
 18) le ATTRIBUTE ROUNDER
 - il va arrondir les valeurs d'un attribut numérique
@@ -281,7 +288,9 @@ vides sinon ça fctionnera pas
 38) le CENTER POINT EXTRACTOR
 
 39) le GEOMETRY EXTRACTOR
-- récup la géométrie de chaque feature
+- récup la géométrie de chaque feature au format précisé
+  pr les stocker dans un new field (bien savoir que FME ne
+  crée par de field pr la géométrie à la base)
 - préciser if on veut remove la geometrie de la table qu'on
   va extraire
 
@@ -294,7 +303,7 @@ vides sinon ça fctionnera pas
   spatiale
 - très used pr détecter if bug géométrie d'une couche (par
   ex if géométries d'1 mm couche doivent pas se toucher,
-  on enchaîne le SpatialRelator avc un prédicat TOUCHES
+  on enchaîne le SpatialRelator avc un prédicat INTERSECTS
   suivi d'un Tester sur le related_supplier et on récup les
   géométries bugs) => also called "TAUX DE RECOUVREMENT"
 
@@ -367,17 +376,23 @@ précédent, alors je dois add des simples cotes entre le
 56) le VARIABLE RETRIEVER
 - permet add un new attribut à la table en précisant les
   valeurs possibles
-- souvent précédé d'un arttributeCreator
+- toujours précédé d'un VARIABLE SETTER pr créer la
+  variable en question et ses valeurs possibles
 
 57) le HORIZONTAL ANGLE CALCULATOR
 - provient de FME HUB et remplace le AZIMUTH CALCULATOR
   désormais obsolète
-- azimuth = angle between the line et the north vector
+- _azimuth = angle between the line et the north vector :
+	- plus on s'approche de 1 plus la line suit le
+	  vecteur Nord
+	- plus on s'approche de 360 plus la line suit le
+	  vecteur Nord inversé
+- _angle = angle between the line et l'axe abscisses
 - calcule l'angle et l'azimuth of any input line/polyline et
   va dc créer ces 2 new fields + un X et Y
 - souvent suivi d'un attributeRounder pour arrondir les 
   valeurs de l'azimuth
-- associé au centerLineReplacer puis au Rotator il permet de 
+- associé au CenterLineReplacer puis au Rotator il permet de 
   calculer un indice de rotation
 
 58) le CIRCULARITY CALCULATOR
@@ -420,6 +435,10 @@ précédent, alors je dois add des simples cotes entre le
 - pr récup les : Xmax Xmin Ymax Ymin et les stock ds la
   table attributaire
 
+67) le PARAMETER FETCHER
+- gives a new attribute au feature MS ça dépend de plusieurs
+  trucs
+
 			  Les WRITERS
 1) KML
 - une fois l'emplacement/filename found, puis ds Feature Type 
@@ -440,6 +459,8 @@ précédent, alors je dois add des simples cotes entre le
 - permet de créer 1 SHP à partir n'importe quel format 
   geodata mais fo choose "automatic" et pas "copy from 
   dataset"
+- je sais pas pk MS faut éviter les copier-collers de
+  writers d'un WSpace à un autre
 
 4) le CSV
 - tjrs bien d'écrire les erreurs ds un CSV

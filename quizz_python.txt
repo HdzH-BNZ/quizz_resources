@@ -106,3 +106,8 @@ print(datetime.today())
   du client
 - can passer du format date au format timestamps (très used
   ds PGSQL)
+
+10) affecter une valeur NULL à une variable
+
+REP:
+myVariable = None
