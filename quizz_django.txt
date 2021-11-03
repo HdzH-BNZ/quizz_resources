@@ -226,12 +226,19 @@ python manage.py showmigrations --list
 23) pr utiliser une date timestamp
 
 REP:
-dans models.py use un DateTimeField()
+dans models.py use un DateTimeField() pr le champ en question
 + idem ds serializers.py et add les param suivants:
 	- source
 	- default_timezone (None if ds PGSQL without TZ)
 	- allow_null si on veut laisser le client MAJ
 	  la date à une valeur nulle
+
+24) pr générer une doc SWAGGER
+
+REP:
+pip install drf-yasg puis add 'drf_yasg' ds le settings.py
+et enfin modifier le urls.py où ya le urlpatterns avec ça:
+https://github.com/axnsan12/drf-yasg
 
 
 
