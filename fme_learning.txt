@@ -379,11 +379,28 @@ précédent, alors je dois add des simples cotes entre le
 - c'est uniquement les data-output "right" qui sont intéressantes
   when on a un polygone
 
-56) le VARIABLE RETRIEVER
+56) le VARIABLE SETTER
+- pr stocker une valeur dans une variable qu'on réutilisera
+  avec un VARIABLE RETRIEVER
+- pr stocker une valeur, suffit d'enchainer:
+  1) COUNTER 
+  2) LIST BUILDER et select l'attribut count créé au-dessus
+  3) LIST RANGE EXTRACTOR et ds "source list attribute" put
+     _list{}._count et remplacer dans "resulting max attrib"
+     le nom du champ qu'on souhaite rajouter
+  4) VARIABLE SETTER laisser le "Variable Name" par défaut
+     MS ds "Value" entrer le nom du champ qu'on a inventé
+     ds "resulting max attrib" au précédent transformer ET
+     laisser GLOBAL en "variable scope"
+
+56b) le VARIABLE RETRIEVER
 - permet add un new attribut à la table en précisant les
   valeurs possibles
 - toujours précédé d'un VARIABLE SETTER pr créer la
   variable en question et ses valeurs possibles
+- pr que ça fonctionne, fo soit qu'ils soient sur la mm
+  branche et qu'on run only cette branche, soit qu'on run
+  tout le Workspace si ils sont sur 2 branches différentes
 
 57) le HORIZONTAL ANGLE CALCULATOR
 - provient de FME HUB et remplace le AZIMUTH CALCULATOR
@@ -429,6 +446,9 @@ précédent, alors je dois add des simples cotes entre le
 
 63) le ATTRIBUTE KEEPER
 - removes all attributes sauf ceux sélectionnés
+- très used entre un FEATURE JOINER et un WRITER when fo
+  export des données vers 1 DB qui a déjà des colonnes à
+  remplir
 
 64) le JUNCTION
 - très used pour join many tables as jointure SQL ou un
@@ -470,6 +490,16 @@ précédent, alors je dois add des simples cotes entre le
 
 4) le CSV
 - tjrs bien d'écrire les erreurs ds un CSV
+- clic sur le writer, puis ds canevas NAVIGATOR dans
+  PARAMETERS clic sur "Overwrite Existing File" et select
+  "Yes" puis la mm sur "Remove Template Sheet If Unchanged"
+  ==> permet d'écraser le fichier à chaque run du writer
+- to extract data into ONLY ONE EXCEL file il faut copier-
+  coller le mm writer et give des sheetNames différents qui
+  donneront autant de feuillets différents ds le excel file
+- if taille d'1 cellule trop grande, fo aller ds l'onglet
+  USER ATTRIBUTES du writer, cocher "manual" et diminuer
+  la largeur de la cellule dans "cell width"
 
 5) le POSTGRES
 - il ouvrira direct autant de writers qu'il n'y a de readers dc

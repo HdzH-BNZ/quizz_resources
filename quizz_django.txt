@@ -233,7 +233,13 @@ dans models.py use un DateTimeField()
 	- allow_null si on veut laisser le client MAJ
 	  la date à une valeur nulle
 
+24) pr mettre en cache un endpoint
 
+REP:
+on doit récup la classe cache_page :
+from django.views.decorators.cache import cache_page
+juste au-dessus du décorateur @api_view, fo add un second
+décorateur : @cache_page(60*15) => temps rétention 15min
 
 -------Le WORKFLOW de Django REST Framework-----------------
 
