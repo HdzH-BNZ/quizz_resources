@@ -240,7 +240,13 @@ pip install drf-yasg puis add 'drf_yasg' ds le settings.py
 et enfin modifier le urls.py où ya le urlpatterns avec ça:
 https://github.com/axnsan12/drf-yasg
 
+25) pr mettre en cache un endpoint
 
+REP:
+on doit récup la classe cache_page :
+from django.views.decorators.cache import cache_page
+juste au-dessus du décorateur @api_view, fo add un second
+décorateur : @cache_page(60*15) => temps rétention 15min
 
 -------Le WORKFLOW de Django REST Framework-----------------
 

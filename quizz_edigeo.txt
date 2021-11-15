@@ -1,0 +1,13 @@
+			QUIZZ EDIGEO
+
+1) what is IDU ?
+
+REP: c'est l'identifiant du plan (110 pour la commune 95110
+de la ville de Sannois par ex)
+
+2) what is un ilôt de parcelle ?
+
+REP: un ensemble de parcelles +/- contigues au sein d'une mm
+     limite administrative MS c pas une notion cadastrale !
+    + ce n'est pas une couche transmise par la DGFiP MS can
+      la créer à partir des parcelles
