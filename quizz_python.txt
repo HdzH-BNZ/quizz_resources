@@ -111,3 +111,11 @@ print(datetime.today())
 
 REP:
 myVariable = None
+
+11) to print all variables d'env
+
+REP:
+import os
+myVariable = dict(os.environ)
+for name, file in myVariable.items():
+    print(name + ' ==> ' + file)
